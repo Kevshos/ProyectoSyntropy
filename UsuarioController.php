@@ -5,8 +5,12 @@ class UsuarioController
 
 	public function __construct()
 	{
+		$conexionbd = mysqli_connect("localhost","root","","prueba");
+		if (!$conexionbd){
+			die("Error de conexion ". mysqli_connect_error());
+		}
 		require "UsuarioModel.php";
-		$this->modeloObj = new UsuarioModel();
+		$this->modeloObj = new UsuarioModel($conexionbd);
 	}
 
 	

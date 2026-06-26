@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas - Epsilon</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <a href="index.html">
+            <img src="logo.png" alt="Epsilon">
+        </a>
+    </div>
+
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
+    <nav id="menu">
+
+        <ul>
+
+            <li><button class="link-button" onclick="window.location.href='gestion.html'">Gestión</button></li>
+            <li><button class="link-button" onclick="window.location.href='rutas.html'">Rutas</button></li>
+            <li><button class="link-button" onclick="window.location.href='mapa.html'">Mapa</button></li>
+            <li><button class="link-button" onclick="window.location.href='estadisticas.html'">Estadísticas</button></li>
+            <li><button class="link-button" onclick="window.location.href='documentacion.html'">Documentación</button></li>
+
+        </ul>
+
+    </nav>
+
+</header>
+
+<section class="dashboard">
+
+    <h2>Panel de Control</h2>
+    <p>Resumen general del sistema</p>
+
+    <div class="stats-grid">
+
+        <div class="card-stat">
+            <h3>Contenedores activos</h3>
+            <p>128</p>
+        </div>
+
+        <div class="card-stat">
+            <h3>Rutas optimizadas</h3>
+            <p>12</p>
+        </div>
+
+        <div class="card-stat">
+            <h3>Recolecciones hoy</h3>
+            <p>34</p>
+        </div>
+
+        <div class="card-stat">
+            <h3>Eficiencia</h3>
+            <p>92%</p>
+        </div>
+
+    </div>
+
+    <div class="panel-actions">
+
+        <button>Generar reporte</button>
+        <button>Exportar datos</button>
+        <button>Actualizar métricas</button>
+
+    </div>
+
+</section>
+
+<script>
+
+function toggleMenu(){
+    document.getElementById("menu").classList.toggle("activo");
+}
+
+</script>
+
+</body>
+</html>

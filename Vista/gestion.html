@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión - Epsilon</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<script>
+if(localStorage.getItem("logueado") !== "si"){
+    window.location.href = "login.html";
+}
+</script>
+
+<header>
+
+    <div class="logo">
+        <a href="index.html">
+            <img src="logo.png" alt="Epsilon">
+        </a>
+    </div>
+
+    <div class="menu-toggle" onclick="toggleMenu()">
+        ☰
+    </div>
+
+    <nav id="menu">
+
+        <ul>
+
+            <li>
+                <button class="link-button"
+                onclick="window.location.href='gestion.html'">
+                    Gestión
+                </button>
+            </li>
+
+            <li>
+                <button class="link-button"
+                onclick="window.location.href='rutas.html'">
+                    Rutas
+                </button>
+            </li>
+
+            <li>
+                <button class="link-button"
+                onclick="window.location.href='mapa.html'">
+                    Mapa
+                </button>
+            </li>
+
+            <li>
+                <button class="link-button"
+                onclick="window.location.href='estadisticas.html'">
+                    Estadísticas
+                </button>
+            </li>
+
+            <li>
+                <button class="link-button"
+                onclick="window.location.href='documentacion.html'">
+                    Documentación
+                </button>
+            </li>
+
+            <li id="sesion"></li>
+
+        </ul>
+
+    </nav>
+
+</header>
+
+<div class="pagina">
+
+    <h2>Gestión de Residuos</h2>
+
+    <p>
+        Administración general de contenedores y recolección.
+    </p>
+
+    <div class="panel">
+
+        <button>
+            Agregar Contenedor
+        </button>
+
+        <button>
+            Editar Contenedor
+        </button>
+
+        <button>
+            Eliminar Contenedor
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+function toggleMenu(){
+    document.getElementById("menu").classList.toggle("activo");
+}
+
+function cerrarSesion(){
+
+    localStorage.removeItem("logueado");
+
+    window.location.href =
+    "index.html";
+
+}
+
+const sesion =
+document.getElementById("sesion");
+
+sesion.innerHTML =
+`<button onclick="cerrarSesion()">
+    Cerrar Sesión
+</button>`;
+
+</script>
+
+</body>
+</html>

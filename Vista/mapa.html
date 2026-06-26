@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa - Epsilon</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+    </head>
+
+<body>
+    <div class="mapa">
+        <div id="map">
+
+        </div>
+    </div>
+
+<script>
+if(localStorage.getItem("logueado") !== "si"){
+    window.location.href = "login.html";
+}
+</script>
+
+<header>
+
+    <div class="logo">
+        <a href="index.html">
+            <img src="logo.png" alt="Epsilon">
+        </a>
+    </div>
+
+    <div class="menu-toggle" onclick="toggleMenu()">
+        ☰
+    </div>
+
+    <nav id="menu">
+
+        <ul>
+
+            <li>
+                <button class="link-button"
+                onclick="window.location.href='gestion.html'">
+                    Gestión
+                </button>
+            </li>
+
+            <li>
+                <button class="link-button"
+                onclick="window.location.href='rutas.html'">
+                    Rutas
+                </button>
+            </li>
+
+            <li>
+                <button class="link-button"
+                onclick="window.location.href='mapa.html'">
+                    Mapa
+                </button>
+            </li>
+
+            <li>
+                <button class="link-button"
+                onclick="window.location.href='estadisticas.html'">
+                    Estadísticas
+                </button>
+            </li>
+
+            <li>
+                <button class="link-button"
+                onclick="window.location.href='documentacion.html'">
+                    Documentación
+                </button>
+            </li>
+
+            <li id="sesion"></li>
+
+        </ul>
+
+    </nav>
+
+</header>
+
+<div class="pagina">
+
+    <h2>Mapa de Contenedores</h2>
+
+    <p>
+        Visualización geográfica de la ciudad.
+    </p>
+
+    <div class="panel">
+
+        <button>
+            Ver Contenedores
+        </button>
+
+        <button>
+            Ver Camiones
+        </button>
+
+        <button>
+            Actualizar Mapa
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+function toggleMenu(){
+    document.getElementById("menu").classList.toggle("activo");
+}
+
+function cerrarSesion(){
+
+    localStorage.removeItem("logueado");
+
+    window.location.href =
+    "index.html";
+
+}
+
+const sesion =
+document.getElementById("sesion");
+
+sesion.innerHTML =
+`<button onclick="cerrarSesion()">
+    Cerrar Sesión
+</button>`;
+
+</script>
+
+</body>
+</html>
