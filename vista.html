@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Clientes</h2>
+
+<h3>Lista Clientes</h3>
+<ul id="lista"></ul>
+
+<script>
+
+async function cargarPantalla() {
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "";
+
+    const res =  await fetch('/miApi/Clientes');//  usa metodo GET del HTTP
+    const data = await res.json();
+
+    data.forEach(c => {
+        const li     = document.createElement("li");
+        li.innerHTML = c.nombre ;
+
+        lista.appendChild(li);
+    });
+}
+
+cargarPantalla();
+
+</script>
+</body>
+</html>
