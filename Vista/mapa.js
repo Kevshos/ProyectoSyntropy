@@ -1,1 +1,0 @@
-var map = L.map('map').setview([-34.9011, -56.1645], 12);
