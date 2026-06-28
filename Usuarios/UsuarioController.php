@@ -21,5 +21,7 @@ class UsuarioController
 	public function buscarDNI($dni){
 		return $this->modeloObj -> buscarDNI($dni);
 	}
-	
+	public function crearUsuario($nombre, $apellido, $cedula, $mail, $a2f,$contrasenia){
+		return $this->modeloObj->crearUsuario($nombre,$cedula,$apellido,$contrasenia,$mail, $a2f);
+	}
 }

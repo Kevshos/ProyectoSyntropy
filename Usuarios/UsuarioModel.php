@@ -4,7 +4,7 @@ class UsuarioModel
     private $CI;
     private $Nombre;
     private $Apellido;
-    private $Contrasena;
+    private $Contrasenia;
     private $Mail;
     private $A2F;
     private $conexion;
@@ -13,6 +13,28 @@ class UsuarioModel
     {
         $this->conexion = $bd;
     }
+
+    public function crearUsuario($n, $c, $a, $co, $m, $a2f){
+            $sql = "INSERT INTO Usuarios (CI, Nombre, Apellido, Contrasenia, Mail, A2F) VALUES (?,?,?,?,?,?)";
+            $stmt = mysqli_prepare($this->conexion, $sql);
+            $this->Nombre = $n;
+            $this->CI = $c;
+            $this->Apellido = $a;
+            $this->Contrasenia = password_hash($co, PASSWORD_DEFAULT);
+            $this->Mail = $m;
+            $this->A2F = $a2f;
+
+            $stmt->bind_param('issssi', $this->CI, $this->Nombre, $this->Apellido, $this->Contrasenia, $this->Mail, $this->A2F);
+            if($stmt->execute()){
+                $stmt->close();
+                return true;
+            }else {
+                $stmt->close();
+                return false;
+            }
+
+        }
+    
 
     public function getAllUsuarios()
     {

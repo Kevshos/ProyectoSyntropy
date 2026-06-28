@@ -22,6 +22,19 @@ switch ($method) {
 			}
         
 break;
+		case 'POST';
+		
+		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Registrar'){
+			$json = file_get_contents('php://input');
+			$datos = json_decode($json);
+			if (!empty($datos->nombre) && !empty($datos->apellido) && !empty($datos->cedula) && !empty($datos->mail) && !empty($datos->contrasenia)){
+			$a2f = isset($datos->a2f) ? $datos->a2f : 0;
+			}
+			echo json_encode ($controladorObj->crearUsuario($datos->nombre, $datos->apellido, $datos->cedula, $datos->mail, $a2f, $datos->contrasenia));
+		} else {
+			echo json_encode(['error' => 'Faltan campos obligatorios']);
+		}
+break; 
     default:
         // Maneja métodos no permitidos (POST, PUT, DELETE, etc.)
         http_response_code(405);
