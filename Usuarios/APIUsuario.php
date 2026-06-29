@@ -9,6 +9,8 @@ $uri    = parse_url($_SERVER['REQUEST_URI'],    PHP_URL_PATH);
 switch ($method) {
 	case 'GET':
 		$cedula = '';
+		$json = file_get_contents('php://input');
+		$datos = json_decode($json);
 
 		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Usuarios'){
 					
@@ -19,6 +21,9 @@ switch ($method) {
 		}
 		if(!empty($cedula)){
 			echo json_encode($controladorObj -> buscarDNI($cedula));
+			}
+		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Login'){
+			echo json_encode($controladorObj->LoguearUsuario($datos->mail, $datos->contrasenia));
 			}
         
 break;
@@ -40,7 +45,6 @@ break;
         http_response_code(405);
         echo json_encode(["error" => "Método no permitido"]);
         break;
-	//case 'POST':
 	
 	//default:
 		// Maneja métodos no permitidos

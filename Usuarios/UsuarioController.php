@@ -24,4 +24,7 @@ class UsuarioController
 	public function crearUsuario($nombre, $apellido, $cedula, $mail, $a2f,$contrasenia){
 		return $this->modeloObj->crearUsuario($nombre,$cedula,$apellido,$contrasenia,$mail, $a2f);
 	}
+	public function loguearUsuario($mail, $contrasenia){
+		return $this->modeloObj->loguearUsuario($mail, $contrasenia);
+	}
 }

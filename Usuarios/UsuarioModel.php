@@ -35,7 +35,39 @@ class UsuarioModel
 
         }
     
+    public function loguearUsuario($mail, $contrasenia){
+        $host = 'localhost';
+        $db = 'prueba';
+        $user = 'root';
+        $pass = '';
+        $charset = 'utf8mb4';
 
+        $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+
+        try{
+            $pdo = new PDO($dsn, $user, $pass);
+
+            $sql = "SELECT * FROM Usuarios WHERE Mail= :mail";
+
+            $stmt = $pdo->prepare($sql);
+
+            $stmt->execute(['mail' => $mail]);
+
+            $fila = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($fila){
+
+        
+            if($fila['contrasenia'] === $contrasenia){
+                return $fila;
+        } else {
+            return ["status" => "error", "mensaje" => "Contraseña incorrecta"];
+        }
+        } else {
+            return ["status" => "error", "mensaje" => "El usuario no existe"];
+        }
+    }catch (\PDOException $e){
+return ["status" => "error", "mensaje" => "Error de conexión: " . $e->getMessage()];    }
+    }
     public function getAllUsuarios()
     {
         $sql = "SELECT Nombre FROM Usuarios";
