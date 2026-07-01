@@ -13,18 +13,27 @@ class UsuarioController
 		$this->modeloObj = new UsuarioModel($conexionbd);
 	}
 
-	
+	//Mostrar todos los usuarios
 	public function getAllUsuarios()
 	{
 		return $this->modeloObj->getAllUsuarios();
 	}
+
+	//Buscar usuario
 	public function buscarDNI($dni){
 		return $this->modeloObj -> buscarDNI($dni);
 	}
+
+	//Registrar Usuario
 	public function crearUsuario($nombre, $apellido, $cedula, $mail, $a2f,$contrasenia){
 		return $this->modeloObj->crearUsuario($nombre,$cedula,$apellido,$contrasenia,$mail, $a2f);
 	}
+
+	//Login de usuario
 	public function loguearUsuario($mail, $contrasenia){
 		return $this->modeloObj->loguearUsuario($mail, $contrasenia);
+	}
+	public function eliminarUsuario($mail){
+		return $this->modeloObj->eliminarUsuario($mail);
 	}
 }

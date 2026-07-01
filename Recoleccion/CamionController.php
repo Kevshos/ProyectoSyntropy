@@ -21,5 +21,8 @@ class CamionController
 	public function buscarMatricula($Matricula){
 		return $this->modeloObj -> buscarMatricula($Matricula);
 	}
+	public function crearCamion($m, $cap, $t, $e, $u){
+		return $this->modeloObj -> crearCamion($m, $cap, $t, $e, $u);
+	}
 	
 }

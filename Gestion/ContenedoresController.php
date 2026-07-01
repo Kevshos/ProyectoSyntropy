@@ -21,5 +21,8 @@ class ContenedoresController
 	public function buscarContenedor($id){
 		return $this->modeloObj -> buscarContenedor($id);
 	}
+	public function crearContenedor($cap,$t,$e,$u){
+		return $this->modeloObj -> crearContenedor($cap, $t, $e, $u);
+	}
 	
 }

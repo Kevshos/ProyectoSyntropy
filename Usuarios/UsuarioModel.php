@@ -14,6 +14,12 @@ class UsuarioModel
         $this->conexion = $bd;
     }
 
+
+
+
+    //Registrar usuario---------------------------------------------------
+
+
     public function crearUsuario($n, $c, $a, $co, $m, $a2f){
             $sql = "INSERT INTO Usuarios (CI, Nombre, Apellido, Contrasenia, Mail, A2F) VALUES (?,?,?,?,?,?)";
             $stmt = mysqli_prepare($this->conexion, $sql);
@@ -35,6 +41,11 @@ class UsuarioModel
 
         }
     
+//------------------------------------------------------------------------------------
+
+        //Loguear usuario------------------------------------------------------------
+
+
     public function loguearUsuario($mail, $contrasenia){
         $host = 'localhost';
         $db = 'prueba';
@@ -83,6 +94,10 @@ return ["status" => "error", "mensaje" => "Error de conexión: " . $e->getMessag
         mysqli_stmt_close($stmt);
         return $usuarios;
     }
+//--------------------------------------------------------------------------------------
+
+    //Buscar usuario---------------------------------------------------------------------
+
 
     public function buscarDNI($dni)
     {
@@ -96,4 +111,18 @@ return ["status" => "error", "mensaje" => "Error de conexión: " . $e->getMessag
         mysqli_stmt_close($stmt);
         return $usuario;
     }
+//----------------------------------------------------------------------------------------------
+
+    //Eliminar usuario------------------------------------------------------------------------------
+    public function eliminarUsuario($m){
+    $sql = "DELETE FROM Usuarios where Mail = ?";
+    $stmt = mysqli_prepare($this->conexion, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $m);
+    mysqli_stmt_execute($stmt);
+    $resultado = mysqli_stmt_get_result($stmt);
+    mysqli_stmt_close($stmt);
+    return $resultado;
+    }
+
+//-------------------------------------------------------------------------------------------------
 }

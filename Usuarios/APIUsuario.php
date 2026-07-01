@@ -12,23 +12,24 @@ switch ($method) {
 		$json = file_get_contents('php://input');
 		$datos = json_decode($json);
 
+		//Mostrar todos los usuarios
 		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Usuarios'){
 					
 			echo json_encode( $controladorObj->getAllUsuarios() );
 		}
+
+		//Buscar usuario
 		if(strpos($uri, '/miApi/Usuario/') === 0){
 			$cedula = trim(str_replace('/miApi/Usuario/', '', $uri));
 		}
 		if(!empty($cedula)){
 			echo json_encode($controladorObj -> buscarDNI($cedula));
 			}
-		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Login'){
-			echo json_encode($controladorObj->LoguearUsuario($datos->mail, $datos->contrasenia));
-			}
         
 break;
 		case 'POST';
 		
+		//Registrar un usuario
 		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Registrar'){
 			$json = file_get_contents('php://input');
 			$datos = json_decode($json);
@@ -39,7 +40,35 @@ break;
 		} else {
 			echo json_encode(['error' => 'Faltan campos obligatorios']);
 		}
+		//Loguear usuario
+		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Login'){
+			echo json_encode($controladorObj->LoguearUsuario($datos->mail, $datos->contrasenia));
+			}
 break; 
+		case 'DELETE';
+
+		//Eliminar usuario
+		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Borrar'){
+			$json = file_get_contents('php://input');
+			$datos = json_decode($json);
+			if(!empty($datos->mail)){
+			$resultado = $controladorObj->eliminarUsuario($datos->mail);
+			if($resultado){
+				echo json_encode([
+					"exito"=> true,
+					"mensaje"=> "Usuario eliminado con exito."
+				]);
+			} else {
+				echo json_encode([
+				"exito" => false,
+				"mensaje"=> "No se pudo eliminar el usuario o el correo no existe"
+				]);
+				}
+			}
+		} else{
+			echo json_encode(['error'=> 'Faltan ingresar mail']);
+		}
+		break;
     default:
         // Maneja métodos no permitidos (POST, PUT, DELETE, etc.)
         http_response_code(405);

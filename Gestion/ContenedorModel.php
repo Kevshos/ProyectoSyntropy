@@ -41,4 +41,22 @@ class ContenedorModel
         mysqli_stmt_close($stmt);
         return $contenedor;
     }
+    public function crearContenedor($cap, $t, $e, $u){
+            $sql = "INSERT INTO Contenedores (CapCarga, Tipo, Estado, Ubicacion) VALUES (?,?,?,?)";
+            $stmt = mysqli_prepare($this->conexion, $sql);
+            $this->CapCarga = $cap;
+            $this->Tipo = $t;
+            $this->Estado = $e;
+            $this->Ubicacion = $u;
+
+            $stmt->bind_param('isss', $this->CapCarga, $this->Tipo, $this->Estado, $this->Ubicacion);
+            if($stmt->execute()){
+                $stmt->close();
+                return true;
+            }else {
+                $stmt->close();
+                return false;
+            }
+
+        }
 }

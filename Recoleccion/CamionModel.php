@@ -41,4 +41,24 @@ class CamionModel
         mysqli_stmt_close($stmt);
         return $camion;
     }
+
+    public function crearCamion($m, $cap, $t, $e, $u){
+            $sql = "INSERT INTO Camiones (Matricula, CapCarga, Tipo, Estado, Ubicacion) VALUES (?,?,?,?,?)";
+            $stmt = mysqli_prepare($this->conexion, $sql);
+            $this->Matricula = $m;
+            $this->CapCarga = $cap;
+            $this->Tipo = $t;
+            $this->Estado = $e;
+            $this->Ubicacion = $u;
+
+            $stmt->bind_param('iisss',$this->Matricula, $this->CapCarga, $this->Tipo, $this->Estado, $this->Ubicacion);
+            if($stmt->execute()){
+                $stmt->close();
+                return true;
+            }else {
+                $stmt->close();
+                return false;
+            }
+
+        }
 }
