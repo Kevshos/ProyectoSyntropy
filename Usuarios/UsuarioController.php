@@ -20,13 +20,19 @@ class UsuarioController
 	}
 
 	//Buscar usuario
-	public function buscarDNI($dni){
-		return $this->modeloObj -> buscarDNI($dni);
+	public function buscarMail($mail){
+		return $this->modeloObj -> buscarMail($mail);
 	}
 
 	//Registrar Usuario
 	public function crearUsuario($nombre, $apellido, $cedula, $mail, $a2f,$contrasenia){
+		$usuario = $this->modeloObj->buscarMail($mail);
+		if($usuario){
+		return "Este mail ya esta registrado, utilice otro mail";
+		}
+		else {
 		return $this->modeloObj->crearUsuario($nombre,$cedula,$apellido,$contrasenia,$mail, $a2f);
+		}
 	}
 
 	//Login de usuario

@@ -9,10 +9,22 @@
 </head>
 
 <body>
-
+<h3>Lista de usuarios registrados</h3>
+<ul id="ListaUsuarios"></ul>
 <script>
 if(localStorage.getItem("logueado") !== "si"){
     window.location.href = "login.html";
+}
+async function CargarPantalla(){
+    const lista = document.getElementById("ListaUsuarios");
+    lista.innerHTML="";
+    const res = await fetch ('/Proyecto/ProyectoSyntropy/Usuarios/miApi/Usuarios');
+    const data = await res.json();
+    data.foreach(c => {
+    const li = document.createElement("li");
+    li.innerHTML= `${c.nombre} ${c.apellido} ${c.contrasenia}`;
+    lista.appendChild("li");
+    });
 }
 </script>
 

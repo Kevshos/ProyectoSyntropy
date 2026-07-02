@@ -99,11 +99,11 @@ return ["status" => "error", "mensaje" => "Error de conexión: " . $e->getMessag
     //Buscar usuario---------------------------------------------------------------------
 
 
-    public function buscarDNI($dni)
+    public function buscarMail($mail)
     {
-        $sql = "SELECT CI, Nombre, Apellido, Mail, A2F FROM Usuarios WHERE CI = ?";
+        $sql = "SELECT Nombre, Apellido, Mail, A2F FROM Usuarios WHERE Mail = ?";
         $stmt = mysqli_prepare($this->conexion, $sql);
-        mysqli_stmt_bind_param($stmt, "s", $dni);
+        mysqli_stmt_bind_param($stmt, "s", $mail);
         mysqli_stmt_execute($stmt);
         $resultado = mysqli_stmt_get_result($stmt);
         $usuario = mysqli_fetch_assoc($resultado);

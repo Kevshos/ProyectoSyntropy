@@ -8,10 +8,11 @@ $uri    = parse_url($_SERVER['REQUEST_URI'],    PHP_URL_PATH);
 
 switch ($method) {
 	case 'GET':
-		$cedula = '';
+		$mail = '';
 		$json = file_get_contents('php://input');
 		$datos = json_decode($json);
 
+		
 		//Mostrar todos los usuarios
 		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Usuarios'){
 					
@@ -20,10 +21,10 @@ switch ($method) {
 
 		//Buscar usuario
 		if(strpos($uri, '/miApi/Usuario/') === 0){
-			$cedula = trim(str_replace('/miApi/Usuario/', '', $uri));
+			$mail = trim(str_replace('/miApi/Usuario/', '', $uri));
 		}
-		if(!empty($cedula)){
-			echo json_encode($controladorObj -> buscarDNI($cedula));
+		if(!empty($mail)){
+			echo json_encode($controladorObj -> buscarMail($mail));
 			}
         
 break;
