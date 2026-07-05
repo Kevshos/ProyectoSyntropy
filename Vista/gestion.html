@@ -22,7 +22,7 @@ async function CargarPantalla(){
     const data = await res.json();
     data.foreach(c => {
     const li = document.createElement("li");
-    li.innerHTML= `${c.nombre} ${c.apellido} ${c.contrasenia}`;
+    li.innerHTML= `${c.nombre} ${c.apellido} ${c.mail} ${c.contrasenia}`;
     lista.appendChild("li");
     });
 }

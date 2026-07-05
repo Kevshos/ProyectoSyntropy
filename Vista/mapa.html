@@ -1,137 +1,137 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mapa - Epsilon</title>
-    <link rel="stylesheet" href="style.css">
-     
-    </head>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Usamos CDNJS para mayor estabilidad y evitar errores 403 de unpkg -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+  </head>
 
-<body>
-    <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1UY3f11CkhiYCqizMBQ8z8TPxZarwhtU&ehbc=2E312F&noprof=1" width="640" height="480"></iframe>
-    <div class="mapa">
-        <div id="map">
+  <body>
+    <script>
+      if (localStorage.getItem("logueado") !== "si") {
+        window.location.href = "login.html";
+      }
+    </script>
 
-        </div>
-    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<script>
-if(localStorage.getItem("logueado") !== "si"){
-    window.location.href = "login.html";
-}
-</script>
-
-<header>
-
-    <div class="logo">
+    <header>
+      <div class="logo">
         <a href="index.html">
-            <img src="logo.png" alt="Epsilon">
+          <img src="logo.png" alt="Epsilon" />
         </a>
-    </div>
+      </div>
 
-    <div class="menu-toggle" onclick="toggleMenu()">
-        ☰
-    </div>
+      <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
-    <nav id="menu">
-
+      <nav id="menu">
         <ul>
+          <li>
+            <button
+              class="link-button"
+              onclick="window.location.href = 'gestion.html'"
+            >
+              Gestión
+            </button>
+          </li>
 
-            <li>
-                <button class="link-button"
-                onclick="window.location.href='gestion.html'">
-                    Gestión
-                </button>
-            </li>
+          <li>
+            <button
+              class="link-button"
+              onclick="window.location.href = 'rutas.html'"
+            >
+              Rutas
+            </button>
+          </li>
 
-            <li>
-                <button class="link-button"
-                onclick="window.location.href='rutas.html'">
-                    Rutas
-                </button>
-            </li>
+          <li>
+            <button
+              class="link-button"
+              onclick="window.location.href = 'mapa.html'"
+            >
+              Mapa
+            </button>
+          </li>
 
-            <li>
-                <button class="link-button"
-                onclick="window.location.href='mapa.html'">
-                    Mapa
-                </button>
-            </li>
+          <li>
+            <button
+              class="link-button"
+              onclick="window.location.href = 'estadisticas.html'"
+            >
+              Estadísticas
+            </button>
+          </li>
 
-            <li>
-                <button class="link-button"
-                onclick="window.location.href='estadisticas.html'">
-                    Estadísticas
-                </button>
-            </li>
+          <li>
+            <button
+              class="link-button"
+              onclick="window.location.href = 'documentacion.html'"
+            >
+              Documentación
+            </button>
+          </li>
 
-            <li>
-                <button class="link-button"
-                onclick="window.location.href='documentacion.html'">
-                    Documentación
-                </button>
-            </li>
-
-            <li id="sesion"></li>
-
+          <li id="sesion"></li>
         </ul>
+      </nav>
+    </header>
 
-    </nav>
+    <div class="pagina">
+      <h2>Mapa de Contenedores</h2>
 
-</header>
+      <p>Visualización geográfica de la ciudad.</p>
 
-<div class="pagina">
+      <div class="panel">
+        <button>Ver Contenedores</button>
+        <button>Ver Camiones</button>
+        <button>Actualizar Mapa</button>
+      </div>
 
-    <h2>Mapa de Contenedores</h2>
-
-    <p>
-        Visualización geográfica de la ciudad.
-    </p>
-
-    <div class="panel">
-
-        <button>
-            Ver Contenedores
-        </button>
-
-        <button>
-            Ver Camiones
-        </button>
-
-        <button>
-            Actualizar Mapa
-        </button>
-
+      <div id="map"></div>
     </div>
 
-</div>
+    <script>
+      function toggleMenu() {
+        document.getElementById("menu").classList.toggle("activo");
+      }
 
-<script>
+      function cerrarSesion() {
+        localStorage.removeItem("logueado");
+        window.location.href = "index.html";
+      }
 
-function toggleMenu(){
-    document.getElementById("menu").classList.toggle("activo");
-}
+      const sesion = document.getElementById("sesion");
+      sesion.innerHTML = `<button onclick="cerrarSesion()">Cerrar Sesión</button>`;
 
-function cerrarSesion(){
+      var map = L.map("map").setView([-34.9011, -56.1645], 13);
 
-    localStorage.removeItem("logueado");
+      L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+        {
+          attribution: "&copy; OpenStreetMap &copy; CARTO",
+        },
+      ).addTo(map);
 
-    window.location.href =
-    "index.html";
+      var marcadorCentro = L.marker([-34.894555, -56.124376]).addTo(map);
+      marcadorCentro.bindPopup(
+        "<b>Buceo</b><br>Contenedor de la casa de emilia.",
+      );
 
-}
+      var estadio = L.marker([-34.8944, -56.1528]).addTo(map);
+      estadio.bindPopup(
+        "<b>Estadio Centenario</b><br>Punto de reciclaje de envases plásticos.",
+      );
 
-const sesion =
-document.getElementById("sesion");
-
-sesion.innerHTML =
-`<button onclick="cerrarSesion()">
-    Cerrar Sesión
-</button>`;
-
-</script>
-
-</body>
+      var letrasMvd = L.marker([-34.9066, -56.1469]).addTo(map);
+      letrasMvd.bindPopup(
+        "<b>Letras de Montevideo</b><br>Contenedor inteligente de vidrio.",
+      );
+    </script>
+  </body>
 </html>
