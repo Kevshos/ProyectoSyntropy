@@ -23,9 +23,6 @@ class UsuarioController
 	public function buscarMail($mail){
 		return $this->modeloObj -> buscarMail($mail);
 	}
-	public function buscarContrasenia($contra){
-		return $this->modeloObj-> buscarContrasenia($contra);
-	}
 
 	//Registrar Usuario
 	//public function crearUsuario($nombre, $apellido, $mail, $a2f,$contrasenia){
@@ -48,7 +45,7 @@ class UsuarioController
 		} 
 		$resultado = $this->modeloObj->crearUsuario($nombre, $apellido, $contrasenia,$mail, $a2f);
 		if($resultado){
-			return ["status"=>"success","mensaje"=>"Usuario creado exitosamente"];
+			return ["status"=>"success","mensaje"=>"Solicitud enviada. Su cuenta se encuentra en espera de aprobacion por un administrador."];
 		} else {
 			return ["status"=>"error","mensaje"=>"No se pudo crear el usuario"];
 		}
@@ -58,12 +55,26 @@ class UsuarioController
 	public function loguearUsuario(){
 		$json = file_get_contents('php://input');
 		$datos = json_decode($json);
-		if($this->modeloObj->buscarMail($datos->mail)===$datos->mail){
-			if($this->modeloObj->buscarContrasenia($datos->contrasenia)===$datos->contrasenia){
-				return $this->modeloObj->loguearUsuario($datos->mail, $datos->contrasenia);	
-			}else {
-				return ["status"=>"error", "mensaje"=>"Contrasenia incorrecta"];
-			}
+		if (!$datos || !isset($datos->mail) || !isset($datos->contrasenia)) {
+            return ["status" => "error", "mensaje" => "Faltan datos de login."];
+        }
+		$usuario = $this->modeloObj->buscarMail($datos->mail);
+		if($usuario){
+			if(password_verify($datos->contrasenia, $usuario['Contrasenia'])){
+				if($usuario['Estado']==='Pendiente'){
+					$this->modeloObj->registrarAcceso($datos->mail, 'Fallido - Cuenta pendiente');
+				} elseif ($usuario['Estado']==='Rechazado'){
+					$this->modeloObj->registrarAcceso($datos->mail, 'Fallido - Cuenta rechazada');
+				} else {
+					$this->modeloObj->registrarAcceso($datos->mail, 'Exitoso');
+					unset($usario['Contrasenia']);
+					return ["status"=>"success", "usuario" => $usuario];
+				}
+
+				
+				} else {
+			return ["status"=>"error","mensaje"=>"Contraseña incorrecta"];
+		}
 		} else {
 			return ["status"=>"error","mensaje"=>"Este mail no esta registrado"];
 		}
@@ -73,4 +84,24 @@ class UsuarioController
 	public function eliminarUsuario($mail){
 		return $this->modeloObj->eliminarUsuario($mail);
 	}
+
+	public function responderSolicitud() {
+    $json = file_get_contents('php://input');
+    $datos = json_decode($json);
+
+    if (!isset($datos->mail) || !isset($datos->decision)) {
+        return ["status" => "error", "mensaje" => "Faltan datos de decisión."];
+    }
+
+    if (!in_array($datos->decision, ['Aceptado', 'Rechazado'])) {
+        return ["status" => "error", "mensaje" => "Decisión inválida."];
+    }
+
+    $resultado = $this->modeloObj->actualizarEstadoUsuario($datos->mail, $datos->decision);
+
+    if ($resultado) {
+        return ["status" => "success", "mensaje" => "Usuario " . strtolower($datos->decision) . " con éxito."];
+    }
+    return ["status" => "error", "mensaje" => "No se pudo procesar la solicitud."];
+}
 }

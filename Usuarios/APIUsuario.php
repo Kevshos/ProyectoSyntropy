@@ -32,11 +32,11 @@ break;
 			//$datos = json_decode($json);
 			echo json_encode ($controladorObj->crearUsuario());
 		//Loguear usuario
+		}
 		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Login'){
 			echo json_encode($controladorObj->LoguearUsuario());
 			}
-			}
-break; 
+break;
 		case 'DELETE';
 
 		//Eliminar usuario
@@ -62,12 +62,10 @@ break;
 		}
 		break;
     default:
-        // Maneja métodos no permitidos (POST, PUT, DELETE, etc.)
         http_response_code(405);
         echo json_encode(["error" => "Método no permitido"]);
         break;
 	
-	//default:
-		// Maneja métodos no permitidos
+ 
 
 }

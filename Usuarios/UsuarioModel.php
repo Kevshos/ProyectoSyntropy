@@ -42,43 +42,6 @@ class UsuarioModel
     
 //------------------------------------------------------------------------------------
 
-        //Loguear usuario------------------------------------------------------------
-
-
-    public function loguearUsuario($mail, $contrasenia){
-        $host = 'localhost';
-        $db = 'prueba';
-        $user = 'root';
-        $pass = '';
-        $charset = 'utf8mb4';
-
-        $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-
-        try{
-            $pdo = new PDO($dsn, $user, $pass);
-
-            $sql = "SELECT * FROM Usuarios WHERE Mail= :mail";
-
-            $stmt = $pdo->prepare($sql);
-
-            $stmt->execute(['mail' => $mail]);
-
-            $fila = $stmt->fetch(PDO::FETCH_ASSOC);
-        if($fila){
-
-            if($fila['contrasenia'] === $contrasenia){
-                return $fila;
-        } else {
-            return ["status" => "error", "mensaje" => "Contraseña incorrecta"];
-        }
-        } else {
-            return ["status" => "error", "mensaje" => "El usuario no existe"];
-        }
-    }catch (\PDOException $e){
-return ["status" => "error", "mensaje" => "Error de conexión: " . $e->getMessage()];    }
-    }
-
-    //-------------------------------------------------------------------------
     //Obtener todos los usuarios ----------------------------------------------
     public function getAllUsuarios()
     {
@@ -139,4 +102,36 @@ return ["status" => "error", "mensaje" => "Error de conexión: " . $e->getMessag
     }
 
 //-------------------------------------------------------------------------------------------------
+//Guardar registro del login
+    public function registrarAcceso($mail, $estado){
+        $sql = "INSERT INTO HistorialLogin (Mail, Estado, Fecha) VALUES (?,?,?)";
+        $stmt = mysqli_prepare($this->conexion, $sql);
+        $fecha = date('Y-m-d H:i:s');
+        mysqli_stmt_bind_param($stmt, "sss", $mail, $estado, $fecha);
+        $resultado = mysqli_stmt_get_result($stmt);
+        mysqli_stmt_close($stmt);
+        return $resultado;
+    }
+
+    //------------------------------------------------------------------------------
+    //Mostrar todos los usuarios pendientes
+    public function getUsuariosPendientes(){
+        $sql = "SELECT Nombre, Apellido, Mail FROM Usuarios WHERE Estado = 'Pendiente'";
+        $stmt = mysqli_prepare($this->conexion, $sql);
+        $resultado = mysqli_stmt_get_result($stmt);
+        mysqli_stmt_close($stmt);
+        return $resultado;
+        }
+    
+    //-------------------------------------------------------------------------------------
+    
+    public function actualizarEstadoUsuario($mail, $nuevoEstado){
+        $sql = "UPDATE Usuarios SET Estado = ?  WHERE Mail = ?";
+        $stmt = mysqli_prepare($this->conexion, $sql);
+        mysqli_stmt_bind_param($stmt, "ss", $nuevoEstado, $mail);
+        $resultado = mysqli_stmt_get_result($stmt);
+        mysqli_stmt_close($stmt);
+        return $resultado;
+    }
+
 }
