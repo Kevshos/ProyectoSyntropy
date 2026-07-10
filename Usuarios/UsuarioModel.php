@@ -66,7 +66,6 @@ class UsuarioModel
             $fila = $stmt->fetch(PDO::FETCH_ASSOC);
         if($fila){
 
-        
             if($fila['contrasenia'] === $contrasenia){
                 return $fila;
         } else {
@@ -78,6 +77,9 @@ class UsuarioModel
     }catch (\PDOException $e){
 return ["status" => "error", "mensaje" => "Error de conexión: " . $e->getMessage()];    }
     }
+
+    //-------------------------------------------------------------------------
+    //Obtener todos los usuarios ----------------------------------------------
     public function getAllUsuarios()
     {
         $sql = "SELECT Nombre FROM Usuarios";
@@ -107,6 +109,19 @@ return ["status" => "error", "mensaje" => "Error de conexión: " . $e->getMessag
         $resultado = mysqli_stmt_get_result($stmt);
         $usuario = mysqli_fetch_assoc($resultado);
 
+        mysqli_stmt_close($stmt);
+        return $usuario;
+    }
+
+//---------------------------------------------------------------------------------------------------
+    //Buscar contrasenia
+    public function buscarContrasenia($contra){
+        $sql = "SELECT Nombre, Apellido, Mail, A2F, Contrasenia FROM Usuarios WHERE Contrasenia =?";
+        $stmt = mysqli_prepare($this->conexion, $sql);
+        mysqli_stmt_bind_param($stmt, "s", $mail);
+        mysqli_stmt_execute($stmt);
+        $resultado = mysqli_stmt_get_result($stmt);
+        $usuario = mysqli_fetch_assoc($resultado);
         mysqli_stmt_close($stmt);
         return $usuario;
     }

@@ -9,10 +9,6 @@ $uri    = parse_url($_SERVER['REQUEST_URI'],    PHP_URL_PATH);
 switch ($method) {
 	case 'GET':
 		$mail = '';
-		$json = file_get_contents('php://input');
-		$datos = json_decode($json);
-
-		
 		//Mostrar todos los usuarios
 		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Usuarios'){
 					
@@ -32,18 +28,13 @@ break;
 		
 		//Registrar un usuario
 		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Registrar'){
-			$json = file_get_contents('php://input');
-			$datos = json_decode($json);
-			if (!empty($datos->nombre) && !empty($datos->apellido) && !empty($datos->cedula) && !empty($datos->mail) && !empty($datos->contrasenia)){
-			$a2f = isset($datos->a2f) ? $datos->a2f : 0;
-			}
-			echo json_encode ($controladorObj->crearUsuario($datos->nombre, $datos->apellido, $datos->cedula, $datos->mail, $a2f, $datos->contrasenia));
-		} else {
-			echo json_encode(['error' => 'Faltan campos obligatorios']);
-		}
+			//$json = file_get_contents('php://input');
+			//$datos = json_decode($json);
+			echo json_encode ($controladorObj->crearUsuario());
 		//Loguear usuario
 		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Login'){
-			echo json_encode($controladorObj->LoguearUsuario($datos->mail, $datos->contrasenia));
+			echo json_encode($controladorObj->LoguearUsuario());
+			}
 			}
 break; 
 		case 'DELETE';

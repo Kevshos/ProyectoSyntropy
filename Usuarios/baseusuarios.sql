@@ -8,6 +8,3 @@ CREATE TABLE IF NOT EXISTS prueba.Usuarios (
     a2f boolean,
     PRIMARY KEY (CI)
 );
-INSERT INTO prueba.Usuarios(Nombre) VALUES ('Cliente1');
-INSERT INTO prueba.Usuarios(Nombre) VALUES ('Cliente2');
-INSERT INTO prueba.Usuarios(Nombre) VALUES ('Cliente3');
