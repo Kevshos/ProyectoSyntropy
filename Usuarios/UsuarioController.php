@@ -53,34 +53,45 @@ class UsuarioController
 
 	//Login de usuario
 	public function loguearUsuario(){
-		$json = file_get_contents('php://input');
-		$datos = json_decode($json);
-		if (!$datos || !isset($datos->mail) || !isset($datos->contrasenia)) {
-            return ["status" => "error", "mensaje" => "Faltan datos de login."];
+    $json = file_get_contents('php://input');
+    $datos = json_decode($json);
+    
+    if (!$datos || !isset($datos->contrasenia) || (empty($datos->mail) && empty($datos->nickname))) {
+        return ["status" => "error", "mensaje" => "Faltan datos de login."];
+    }
+
+    $usuarioEncontrado = null;
+
+    if (!empty($datos->mail)) {
+        $usuarioEncontrado = $this->modeloObj->buscarMail($datos->mail);
+    }
+
+    if ($usuarioEncontrado) {
+        
+        if (password_verify($datos->contrasenia, $usuarioEncontrado['contrasena'])) {
+            
+            if ($usuarioEncontrado['estado'] === 'Pendiente') {
+                $this->modeloObj->registrarAcceso($usuarioEncontrado['mail'], 'Fallido - Cuenta pendiente');
+                return ["status" => "error", "mensaje" => "Cuenta pendiente."];
+                
+            } elseif ($usuarioEncontrado['estado'] === 'Rechazado') {
+                $this->modeloObj->registrarAcceso($usuarioEncontrado['mail'], 'Fallido - Cuenta rechazada');
+                return ["status" => "error", "mensaje" => "Cuenta rechazada."];
+                
+            } else {
+                $this->modeloObj->registrarAcceso($usuarioEncontrado['mail'], 'Exitoso');
+                unset($usuarioEncontrado['contrasena']);
+                return ["status" => "success", "usuario" => $usuarioEncontrado];
+            }
+            
+        } else {
+            return ["status" => "error", "mensaje" => "Contraseña incorrecta"];
         }
-		$usuario = $this->modeloObj->buscarMail($datos->mail);
-		if($usuario){
-			if(password_verify($datos->contrasenia, $usuario['Contrasenia'])){
-				if($usuario['Estado']==='Pendiente'){
-					$this->modeloObj->registrarAcceso($datos->mail, 'Fallido - Cuenta pendiente');
-				} elseif ($usuario['Estado']==='Rechazado'){
-					$this->modeloObj->registrarAcceso($datos->mail, 'Fallido - Cuenta rechazada');
-				} else {
-					$this->modeloObj->registrarAcceso($datos->mail, 'Exitoso');
-					unset($usario['Contrasenia']);
-					return ["status"=>"success", "usuario" => $usuario];
-				}
-
-				
-				} else {
-			return ["status"=>"error","mensaje"=>"Contraseña incorrecta"];
-		}
-		} else {
-			return ["status"=>"error","mensaje"=>"Este mail no esta registrado"];
-		}
-
-		
-	}
+        
+    } else {
+        return ["status" => "error", "mensaje" => "Este usuario/mail no está registrado"];
+    }
+}
 	public function eliminarUsuario($mail){
 		return $this->modeloObj->eliminarUsuario($mail);
 	}

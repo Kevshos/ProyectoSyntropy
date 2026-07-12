@@ -110,11 +110,12 @@ class UsuarioModel
 //-------------------------------------------------------------------------------------------------
 //Guardar registro del login
     public function registrarAcceso($mail, $estado){
-        $sql = "INSERT INTO HistorialLogin (Mail, Estado, Fecha) VALUES (?,?,?)";
+        $sql = "INSERT INTO historiallogin (Estado, fecha, mail) VALUES (?,?,?)";
         $stmt = mysqli_prepare($this->conexion, $sql);
+        date_default_timezone_set('America/Montevideo');
         $fecha = date('Y-m-d H:i:s');
-        mysqli_stmt_bind_param($stmt, "sss", $mail, $estado, $fecha);
-        $resultado = mysqli_stmt_get_result($stmt);
+        mysqli_stmt_bind_param($stmt, "sss", $estado, $fecha, $mail);
+        $resultado = mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
         return $resultado;
     }
