@@ -1,12 +1,13 @@
 <?php
 class UsuarioModel
 {
-    private $CI;
+    private $nickname;
     private $Nombre;
     private $Apellido;
     private $Contrasenia;
     private $Mail;
     private $A2F;
+    private $rol;
     private $conexion;
 
     public function __construct($bd)
@@ -20,16 +21,18 @@ class UsuarioModel
     //Registrar usuario---------------------------------------------------
 
 
-    public function crearUsuario($n, $a, $co, $m, $a2f){
-            $sql = "INSERT INTO Usuarios (Nombre, Apellido, Contrasenia, Mail, A2F) VALUES (?,?,?,?,?)";
+    public function crearUsuario($n, $a, $co, $m, $a2f, $u){
+            $sql = "INSERT INTO usuario (nombre, apellido, mail, contrasena, a2f, rol, nickname) VALUES (?,?,?,?,?,?,?)";
             $stmt = mysqli_prepare($this->conexion, $sql);
             $this->Nombre = $n;
             $this->Apellido = $a;
             $this->Contrasenia = password_hash($co, PASSWORD_DEFAULT);
             $this->Mail = $m;
             $this->A2F = $a2f;
+            $this->nickname = $u;
+            $this->rol= 'Vecino';
 
-            $stmt->bind_param('ssssi', $this->Nombre, $this->Apellido, $this->Contrasenia, $this->Mail, $this->A2F);
+            $stmt->bind_param('ssssiss', $this->Nombre, $this->Apellido, $this->Mail, $this->Contrasenia,  $this->A2F, $this->rol, $this->nickname);
             if($stmt->execute()){
                 $stmt->close();
                 return true;
@@ -65,8 +68,11 @@ class UsuarioModel
 
     public function buscarMail($mail)
     {
-        $sql = "SELECT Nombre, Apellido, Mail, A2F FROM Usuarios WHERE Mail = ?";
+        $sql = "SELECT * FROM usuario WHERE mail = ?";
         $stmt = mysqli_prepare($this->conexion, $sql);
+        if (!$stmt) {
+        die(json_encode(["error" => "Error en SQL: " . mysqli_error($this->conexion)]));
+    }
         mysqli_stmt_bind_param($stmt, "s", $mail);
         mysqli_stmt_execute($stmt);
         $resultado = mysqli_stmt_get_result($stmt);

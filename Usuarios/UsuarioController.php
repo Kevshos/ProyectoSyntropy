@@ -5,7 +5,7 @@ class UsuarioController
 
 	public function __construct()
 	{
-		$conexionbd = mysqli_connect("localhost","root","","prueba");
+		$conexionbd = mysqli_connect("localhost","root","","Syntropy");
 		if (!$conexionbd){
 			die("Error de conexion ". mysqli_connect_error());
 		}
@@ -30,20 +30,20 @@ class UsuarioController
 			$json = file_get_contents('php://input');
 		$datos = json_decode($json);
 //validar datos
-		if (!$datos || !isset($datos->mail) || !isset($datos->contrasenia) || !isset($datos->nombre) || !isset($datos->apellido)) {
+		if (!$datos || !isset($datos->mail) || !isset($datos->contrasenia) || !isset($datos->nombre) || !isset($datos->apellido)|| !isset($datos->usuario)) {
             return ["status" => "error", "mensaje" => "Faltan campos obligatorios o el JSON está mal formado."];
         }
-
+		$usuario = $datos->usuario;
         $mail = $datos->mail;
         $nombre = $datos->nombre;
         $apellido = $datos->apellido;
         $contrasenia = $datos->contrasenia;
         $a2f = isset($datos->a2f) ? $datos->a2f : 0; 
-		$UsuarioExistente = $this->modeloObj->buscarMail($mail);
+		$UsuarioExistente = $this->modeloObj->buscarMail($datos->mail);
 		if($UsuarioExistente){
 			return ["status"=>"error", "mensaje" => "Este mail ya esta registrado, utilice otro mail"];
 		} 
-		$resultado = $this->modeloObj->crearUsuario($nombre, $apellido, $contrasenia,$mail, $a2f);
+		$resultado = $this->modeloObj->crearUsuario($nombre, $apellido, $contrasenia,$mail, $a2f, $usuario);
 		if($resultado){
 			return ["status"=>"success","mensaje"=>"Solicitud enviada. Su cuenta se encuentra en espera de aprobacion por un administrador."];
 		} else {
