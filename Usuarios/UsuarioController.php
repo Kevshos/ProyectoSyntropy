@@ -53,6 +53,9 @@ class UsuarioController
 
 	//Login de usuario
 	public function loguearUsuario(){
+        if(session_start()=== PHP_SESSION_NONE){
+            session_start();
+        }
     $json = file_get_contents('php://input');
     $datos = json_decode($json);
     
@@ -81,6 +84,7 @@ class UsuarioController
             } else {
                 $this->modeloObj->registrarAcceso($usuarioEncontrado['mail'], 'Exitoso');
                 unset($usuarioEncontrado['contrasena']);
+                $_SESSION['rol']=$usuarioEncontrado['rol'];
                 return ["status" => "success", "usuario" => $usuarioEncontrado];
             }
             

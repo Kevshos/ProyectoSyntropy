@@ -9,6 +9,7 @@ class UsuarioModel
     private $A2F;
     private $rol;
     private $conexion;
+    private $fecha;
 
     public function __construct($bd)
     {
@@ -23,6 +24,8 @@ class UsuarioModel
 
     public function crearUsuario($n, $a, $co, $m, $a2f, $u){
             $sql = "INSERT INTO usuario (nombre, apellido, mail, contrasena, a2f, rol, nickname) VALUES (?,?,?,?,?,?,?)";
+            $sql2= "INSERT INTO registro(mail, fecha) VALUES (?,?)";
+            $stmt2 = mysqli_prepare($this->conexion, $sql2);
             $stmt = mysqli_prepare($this->conexion, $sql);
             $this->Nombre = $n;
             $this->Apellido = $a;
@@ -31,7 +34,10 @@ class UsuarioModel
             $this->A2F = $a2f;
             $this->nickname = $u;
             $this->rol= 'Vecino';
-
+            $this->fecha = date('Y-m-d H:i:s');
+            $stmt2->bind_param('ss', $this->Mail, $this->fecha);
+            $stmt2->execute();
+            $stmt2->close();
             $stmt->bind_param('ssssiss', $this->Nombre, $this->Apellido, $this->Mail, $this->Contrasenia,  $this->A2F, $this->rol, $this->nickname);
             if($stmt->execute()){
                 $stmt->close();
@@ -40,8 +46,7 @@ class UsuarioModel
                 $stmt->close();
                 return false;
             }
-
-        }
+    }
     
 //------------------------------------------------------------------------------------
 

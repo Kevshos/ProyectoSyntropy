@@ -1,137 +1,135 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Epsilon</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      #btnAdmin {
+        display: none;
+      }
+    </style>
+  </head>
 
-<body>
-
-<header>
-
-    <div class="logo">
+  <body>
+    <header>
+      <div class="logo">
         <a href="index.html">
-            <img src="logo.png" alt="Epsilon">
+          <img src="logo.png" alt="Epsilon" />
         </a>
-    </div>
+      </div>
 
-    <div class="menu-toggle" onclick="toggleMenu()">
-        ☰
-    </div>
+      <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
-    <nav id="menu">
-
+      <nav id="menu">
         <ul>
+          <li>
+            <button
+              class="link-button"
+              onclick="verificarAcceso('gestion.html')"
+            >
+              Gestión
+            </button>
+          </li>
 
-            <li>
-                <button class="link-button" onclick="verificarAcceso('gestion.html')">
-                    Gestión
-                </button>
-            </li>
+          <li>
+            <button class="link-button" onclick="verificarAcceso('rutas.html')">
+              Rutas
+            </button>
+          </li>
 
-            <li>
-                <button class="link-button" onclick="verificarAcceso('rutas.html')">
-                    Rutas
-                </button>
-            </li>
+          <li>
+            <button
+              class="link-button"
+              onclick="verificarAcceso('estadisticas.html')"
+            >
+              Estadísticas
+            </button>
+          </li>
+          <li>
+            <button
+              id="btnAdmin"
+              class="link-button"
+              onclick="verificarAcceso('panel_registro.html')"
+            >
+              Panel de Registro
+            </button>
+          </li>
 
-
-            <li>
-                <button class="link-button" onclick="verificarAcceso('estadisticas.html')">
-                    Estadísticas
-                </button>
-            </li>
-
-
-            <li id="sesion"></li>
-
+          <li id="sesion"></li>
         </ul>
+      </nav>
+    </header>
 
-    </nav>
-
-</header>
-
-<section class="contenido">
-
-    <div class="texto">
-
+    <section class="contenido">
+      <div class="texto">
         <h4>texto 4</h4>
 
         <h2>
-            Transformando <br>
-            la Gestión <br>
-            Urbana
+          Transformando <br />
+          la Gestión <br />
+          Urbana
         </h2>
 
         <p>
-            Plataforma integral para el monitoreo,
-            recolección y optimización de residuos
-            en tiempo real.
+          Plataforma integral para el monitoreo, recolección y optimización de
+          residuos en tiempo real.
         </p>
 
         <div class="botones">
+          <button onclick="verificarAcceso('mapa.html')">Explorar Mapa</button>
 
-            <button onclick="verificarAcceso('mapa.html')">
-                Explorar Mapa
-            </button>
-
-            <button onclick="verificarAcceso('documentacion.html')">
-                Documentación
-            </button>
-
+          <button onclick="verificarAcceso('documentacion.html')">
+            Documentación
+          </button>
         </div>
+      </div>
 
-    </div>
+      <div class="imagen">
+        <img src="fotocamion.png" alt="Camión" />
+      </div>
+    </section>
 
-    <div class="imagen">
-        <img src="fotocamion.png" alt="Camión">
-    </div>
+    <script>
+      function toggleMenu() {
+        document.getElementById("menu").classList.toggle("activo");
+      }
 
-</section>
+      function verificarAcceso(destino) {
+        if (localStorage.getItem("logueado") === "si") {
+          window.location.href = destino;
+        } else {
+          window.location.href = "login.html";
+        }
+      }
 
-<script>
+      function cerrarSesion() {
+        localStorage.removeItem("logueado");
+        location.reload();
+      }
 
-function toggleMenu(){
-    document.getElementById("menu").classList.toggle("activo");
-}
+      const sesion = document.getElementById("sesion");
 
-function verificarAcceso(destino){
-
-    if(localStorage.getItem("logueado") === "si"){
-        window.location.href = destino;
-    }else{
-        window.location.href = "login.html";
-    }
-
-}
-
-function cerrarSesion(){
-
-    localStorage.removeItem("logueado");
-    location.reload();
-
-}
-
-const sesion = document.getElementById("sesion");
-
-if(localStorage.getItem("logueado") === "si"){
-
-    sesion.innerHTML =
-    `<button onclick="cerrarSesion()">Cerrar Sesión</button>`;
-
-}else{
-
-    sesion.innerHTML =
-    `<button onclick="window.location.href='login.html'">
+      if (localStorage.getItem("logueado") === "si") {
+        sesion.innerHTML = `<button onclick="cerrarSesion()">Cerrar Sesión</button>`;
+      } else {
+        sesion.innerHTML = `<button onclick="window.location.href='login.html'">
         Iniciar Sesión
     </button>`;
-
-}
-
-</script>
-
-</body>
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("../Usuarios/obtener_sesion.php")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.rol === "Administrador") {
+              document.getElementById("btnAdmin").style.display = "block";
+            }
+          })
+          .catch((error) =>
+            console.error("Error al obtener la sesión:", error),
+          );
+      });
+    </script>
+  </body>
 </html>
