@@ -72,20 +72,22 @@ class UsuarioController
     if ($usuarioEncontrado) {
         
         if (password_verify($datos->contrasenia, $usuarioEncontrado['contrasena'])) {
+            $estadoEncontrado = null;
+            $estadoEncontrado = $this->modeloObj->buscarEstado($usuarioEncontrado['mail']);
             
-            if ($usuarioEncontrado['estado'] === 'Pendiente') {
-                $this->modeloObj->registrarAcceso($usuarioEncontrado['mail'], 'Fallido - Cuenta pendiente');
+            if ($estadoEncontrado['estado'] === 'Pendiente') {
+                $this->modeloObj->registrarAcceso($estadoEncontrado['mail'], 'Fallido - Cuenta pendiente');
                 return ["status" => "error", "mensaje" => "Cuenta pendiente."];
                 
-            } elseif ($usuarioEncontrado['estado'] === 'Rechazado') {
-                $this->modeloObj->registrarAcceso($usuarioEncontrado['mail'], 'Fallido - Cuenta rechazada');
+            } elseif ($estadoEncontrado['estado'] === 'Rechazado') {
+                $this->modeloObj->registrarAcceso($estadoEncontrado['mail'], 'Fallido - Cuenta rechazada');
                 return ["status" => "error", "mensaje" => "Cuenta rechazada."];
                 
             } else {
-                $this->modeloObj->registrarAcceso($usuarioEncontrado['mail'], 'Exitoso');
+                $this->modeloObj->registrarAcceso($estadoEncontrado['mail'], 'Exitoso');
                 unset($usuarioEncontrado['contrasena']);
                 $_SESSION['rol']=$usuarioEncontrado['rol'];
-                return ["status" => "success", "usuario" => $usuarioEncontrado];
+                return ["status" => "success", "usuario" => $estadoEncontrado];
             }
             
         } else {
@@ -118,5 +120,11 @@ class UsuarioController
         return ["status" => "success", "mensaje" => "Usuario " . strtolower($datos->decision) . " con éxito."];
     }
     return ["status" => "error", "mensaje" => "No se pudo procesar la solicitud."];
+}
+public function getAllPendientes(){
+    $json = file_get_contents('php://input');
+    $datos = json_decode($json);
+
+    return $this->modeloObj->getAllPendientes();
 }
 }

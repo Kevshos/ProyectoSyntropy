@@ -9,263 +9,85 @@
     <div id="app">
       <h1>Usuarios pendientes</h1>
       <div id="listaUsuarios"></div>
-      <button id="restaurarBtn">Restaurar todos</button>
     </div>
 
     <script>
-      const API_URL = "api_usuarios.php"; // ← tu endpoint PHP
-
+      const API_URL =
+        "http://localhost/Proyecto/ProyectoSyntropy/Usuarios/miApi/";
       let usuarios = [];
+
       const listaContainer = document.getElementById("listaUsuarios");
-      const restaurarBtn = document.getElementById("restaurarBtn");
+
       async function obtenerUsuarios() {
         try {
-          const resp = await fetch(API_URL);
+          const resp = await fetch(`${API_URL}ListarPendientes`);
           if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
           const data = await resp.json();
-          // Se asume que data es un array de usuarios
-          // (o un objeto con una propiedad 'usuarios', ajusta según tu API)
-          if (Array.isArray(data)) {
-            usuarios = data;
-          } else if (data && Array.isArray(data.usuarios)) {
-            usuarios = data.usuarios;
-          } else {
-            // Si no viene como esperamos, inicializamos vacío
-            usuarios = [];
-          }
+
+          usuarios = Array.isArray(data) ? data : data?.usuarios || [];
           renderizarLista();
         } catch (error) {
           console.error("Error al obtener usuarios:", error);
-          // Mostrar mensaje de error en el DOM
-          listaContainer.innerHTML = `<p style="color: #b33;">⚠️ Error al cargar usuarios. Revisa la consola.</p>`;
+          listaContainer.innerHTML = `<p>Error al cargar usuarios.</p>`;
         }
       }
 
-      /**
-       * Envía una acción (aceptar/rechazar) para un usuario.
-       * @param {number} id - ID del usuario
-       * @param {string} accion - 'aceptar' o 'rechazar'
-       */
-      async function enviarAccion(id, accion) {
+      async function enviarAccion(mail, decision) {
         try {
-          const formData = new FormData();
-          formData.append("id", id);
-          formData.append("accion", accion);
-
-          const resp = await fetch(API_URL, {
-            method: "POST",
-            body: formData,
+          const resp = await fetch(`${API_URL}Actualizar`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ mail, decision }),
           });
 
           if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-
           const resultado = await resp.json();
-          // Se espera un objeto con { success: true, ... } o similar
-          if (resultado && resultado.success === true) {
-            // Actualizar el estado local: marcar como no pendiente
-            const usuario = usuarios.find((u) => u.id === id);
+
+          if (resultado?.status === "success") {
+            const usuario = usuarios.find((u) => u.mail === mail);
             if (usuario) {
-              usuario.estado = accion === "aceptar" ? "aceptado" : "rechazado";
+              usuario.estado =
+                decision === "Aceptado" ? "Aceptado" : "Rechazado";
             }
             renderizarLista();
           } else {
-            // Si el backend devuelve success:false o mensaje de error
-            console.warn("Acción no exitosa:", resultado);
-            // Opcional: mostrar un mensaje al usuario
-            alert(`No se pudo ${accion} el usuario.`);
+            alert(`No se pudo ${decision} el usuario.`);
           }
         } catch (error) {
-          console.error(`Error al ${accion} usuario ${id}:`, error);
-          alert(`Error de conexión al ${accion} usuario.`);
+          console.error(error);
+          alert(`Error de conexión al ${decision} usuario.`);
         }
       }
-
-      /**
-       * Restaura todos los usuarios a estado 'pendiente' (o reinicia el listado).
-       * Puede ser un endpoint específico o reutilizar la misma API.
-       */
-      async function restaurarTodos() {
-        try {
-          // Opción 1: llamar a un endpoint específico de restauración
-          // const resp = await fetch(API_URL + '?accion=restaurar', { method: 'POST' });
-
-          // Opción 2: si tu backend no tiene restauración, recargamos desde el servidor
-          // y forzamos que todos estén pendientes (depende de tu lógica)
-          // En este ejemplo, asumimos que hay un endpoint que devuelve todos los usuarios
-          // en estado pendiente de nuevo.
-
-          // Vamos a usar el mismo endpoint pero con un parámetro especial
-          const formData = new FormData();
-          formData.append("accion_global", "restaurar");
-
-          const resp = await fetch(API_URL, {
-            method: "POST",
-            body: formData,
-          });
-
-          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-
-          const resultado = await resp.json();
-          if (resultado && resultado.success === true) {
-            // Si el backend devuelve la lista restaurada
-            if (Array.isArray(resultado.usuarios)) {
-              usuarios = resultado.usuarios;
-            } else {
-              // Si no, recargamos desde el servidor
-              await obtenerUsuarios();
-              return;
-            }
-            renderizarLista();
-          } else {
-            // Si no hay restauración en el backend, recargamos
-            await obtenerUsuarios();
-          }
-        } catch (error) {
-          console.error("Error al restaurar:", error);
-          // Fallback: recargar la lista
-          await obtenerUsuarios();
-        }
-      }
-
-      // ============================================================
-      //  RENDERIZADO (SIN CSS, SOLO HTML PLANO)
-      // ============================================================
 
       function renderizarLista() {
-        // Filtrar solo pendientes
-        const pendientes = usuarios.filter((u) => u.estado === "pendiente");
+        const pendientes = usuarios.filter((u) => u.estado === "Pendiente");
 
         if (pendientes.length === 0) {
           listaContainer.innerHTML = `
-                    <p>✅ No hay usuarios pendientes.</p>
-                    <p><small>Todos han sido procesados.</small></p>
-                `;
+            <p>No hay usuarios pendientes.</p>
+            <p>Todos han sido procesados.</p>`;
           return;
         }
 
         let html = '<ul style="list-style: none; padding: 0;">';
-
         pendientes.forEach((usuario) => {
-          const nombreSeguro = escapeHTML(usuario.nombre);
           html += `
-                    <li style="margin: 0.5rem 0; padding: 0.5rem; border: 1px solid #ccc; display: flex; align-items: center; justify-content: space-between; max-width: 500px;">
-                        <span><strong>${nombreSeguro}</strong> (pendiente)</span>
-                        <span>
-                            <button onclick="aceptarUsuario(${usuario.id})" style="margin-right: 0.3rem;">✔ Aceptar</button>
-                            <button onclick="rechazarUsuario(${usuario.id})">✖ Rechazar</button>
-                        </span>
-                    </li>
-                `;
+            <li>
+              <span><strong>${usuario.nombre}</strong></span>
+              <span>
+                <button onclick="aceptarUsuario('${usuario.mail}')">Aceptar</button>
+                <button onclick="rechazarUsuario('${usuario.mail}')">Rechazar</button>
+              </span>
+            </li>`;
         });
-
         html += "</ul>";
         listaContainer.innerHTML = html;
       }
 
-      // Función de escape básica para prevenir XSS
-      function escapeHTML(texto) {
-        const map = {
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#039;",
-        };
-        return texto.replace(/[&<>"']/g, function (m) {
-          return map[m];
-        });
-      }
-
-      // ============================================================
-      //  FUNCIONES GLOBALES (para onclick en los botones)
-      // ============================================================
-
-      // Las declaramos como funciones globales para que los onclick las encuentren
-      window.aceptarUsuario = function (id) {
-        enviarAccion(id, "aceptar");
-      };
-
-      window.rechazarUsuario = function (id) {
-        enviarAccion(id, "rechazar");
-      };
-
-      // ============================================================
-      //  EVENTO RESTAURAR
-      // ============================================================
-
-      restaurarBtn.addEventListener("click", function () {
-        restaurarTodos();
-      });
-
-      // ============================================================
-      //  INICIO: CARGAR USUARIOS AL ARRANCAR
-      // ============================================================
+      window.aceptarUsuario = (mail) => enviarAccion(mail, "Aceptado");
+      window.rechazarUsuario = (mail) => enviarAccion(mail, "Rechazado");
 
       obtenerUsuarios();
-
-      // ============================================================
-      //  EJEMPLO DE ESTRUCTURA PARA PHP (api_usuarios.php)
-      //  (comentado para referencia)
-      // ============================================================
-      /*
-        // --- api_usuarios.php (ejemplo mínimo) ---
-        <?php
-        header('Content-Type: application/json');
-
-        // Simulación de base de datos en sesión o archivo
-        session_start();
-        if (!isset($_SESSION['usuarios'])) {
-            $_SESSION['usuarios'] = [
-                ['id' => 1, 'nombre' => 'María González', 'estado' => 'pendiente'],
-                ['id' => 2, 'nombre' => 'Carlos Herrera', 'estado' => 'pendiente'],
-                ['id' => 3, 'nombre' => 'Ana Lucía Méndez', 'estado' => 'pendiente'],
-                ['id' => 4, 'nombre' => 'Jorge Rivas', 'estado' => 'pendiente'],
-                ['id' => 5, 'nombre' => 'Laura Fernández', 'estado' => 'pendiente'],
-                ['id' => 6, 'nombre' => 'David Ortiz', 'estado' => 'pendiente'],
-            ];
-        }
-
-        // GET: devolver solo pendientes
-        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            $pendientes = array_filter($_SESSION['usuarios'], function($u) {
-                return $u['estado'] === 'pendiente';
-            });
-            echo json_encode(array_values($pendientes));
-            exit;
-        }
-
-        // POST: procesar acciones
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Restaurar todos
-            if (isset($_POST['accion_global']) && $_POST['accion_global'] === 'restaurar') {
-                foreach ($_SESSION['usuarios'] as &$u) {
-                    $u['estado'] = 'pendiente';
-                }
-                echo json_encode(['success' => true, 'usuarios' => $_SESSION['usuarios']]);
-                exit;
-            }
-
-            // Aceptar / Rechazar
-            $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
-            $accion = isset($_POST['accion']) ? $_POST['accion'] : '';
-
-            if ($id && in_array($accion, ['aceptar', 'rechazar'])) {
-                foreach ($_SESSION['usuarios'] as &$u) {
-                    if ($u['id'] === $id) {
-                        $u['estado'] = ($accion === 'aceptar') ? 'aceptado' : 'rechazado';
-                        echo json_encode(['success' => true, 'mensaje' => 'Usuario actualizado']);
-                        exit;
-                    }
-                }
-            }
-
-            echo json_encode(['success' => false, 'mensaje' => 'Acción inválida']);
-            exit;
-        }
-        */
-      // ============================================================
-
-      console.log("✅ Aplicación lista. Conecta con tu API PHP en:", API_URL);
     </script>
   </body>
 </html>

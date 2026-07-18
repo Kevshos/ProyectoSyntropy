@@ -14,6 +14,9 @@ switch ($method) {
 					
 			echo json_encode( $controladorObj->getAllUsuarios() );
 		}
+		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/ListarPendientes'){
+			echo json_encode( $controladorObj->getAllPendientes() );
+		}
 
 		//Buscar usuario
 		if(strpos($uri, '/miApi/Usuario/') === 0){
@@ -60,6 +63,11 @@ break;
 		} else{
 			echo json_encode(['error'=> 'Faltan ingresar mail']);
 		}
+		break;
+		case 'PATCH';
+		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Actualizar'){
+			echo json_encode($controladorObj->responderSolicitud());
+			}
 		break;
     default:
         http_response_code(405);

@@ -10,6 +10,7 @@ class UsuarioModel
     private $rol;
     private $conexion;
     private $fecha;
+    private $estado;
 
     public function __construct($bd)
     {
@@ -22,31 +23,62 @@ class UsuarioModel
     //Registrar usuario---------------------------------------------------
 
 
-    public function crearUsuario($n, $a, $co, $m, $a2f, $u){
-            $sql = "INSERT INTO usuario (nombre, apellido, mail, contrasena, a2f, rol, nickname) VALUES (?,?,?,?,?,?,?)";
-            $sql2= "INSERT INTO registro(mail, fecha) VALUES (?,?)";
-            $stmt2 = mysqli_prepare($this->conexion, $sql2);
-            $stmt = mysqli_prepare($this->conexion, $sql);
-            $this->Nombre = $n;
-            $this->Apellido = $a;
-            $this->Contrasenia = password_hash($co, PASSWORD_DEFAULT);
-            $this->Mail = $m;
-            $this->A2F = $a2f;
-            $this->nickname = $u;
-            $this->rol= 'Vecino';
-            $this->fecha = date('Y-m-d H:i:s');
-            $stmt2->bind_param('ss', $this->Mail, $this->fecha);
-            $stmt2->execute();
-            $stmt2->close();
-            $stmt->bind_param('ssssiss', $this->Nombre, $this->Apellido, $this->Mail, $this->Contrasenia,  $this->A2F, $this->rol, $this->nickname);
-            if($stmt->execute()){
-                $stmt->close();
-                return true;
-            }else {
-                $stmt->close();
-                return false;
-            }
+   public function crearUsuario($n, $a, $co, $m, $a2f, $u){
+    try {
+        // 1. Insertar PRIMERO en la tabla usuario
+        $sql = "INSERT INTO usuario (nombre, apellido, mail, contrasena, a2f, rol, nickname) VALUES (?,?,?,?,?,?,?)";
+        $stmt = mysqli_prepare($this->conexion, $sql);
+        
+        if (!$stmt) {
+            throw new Exception("Error al preparar 'usuario': " . mysqli_error($this->conexion));
+        }
+
+        $this->Nombre = $n;
+        $this->Apellido = $a;
+        $this->Contrasenia = password_hash($co, PASSWORD_DEFAULT);
+        $this->Mail = $m;
+        $this->A2F = $a2f;
+        $this->nickname = $u;
+        $this->rol = 'Vecino';
+        
+        $stmt->bind_param('ssssiss', $this->Nombre, $this->Apellido, $this->Mail, $this->Contrasenia, $this->A2F, $this->rol, $this->nickname);
+        
+        if (!$stmt->execute()) {
+            throw new Exception("Error al insertar en 'usuario': " . $stmt->error);
+        }
+        $stmt->close();
+
+        // 2. Insertar SEGUNDO en la tabla registro (ahora que el usuario ya existe)
+        $sql2 = "INSERT INTO registro (mail, fecha, estado) VALUES (?,?,?)"; 
+        $stmt2 = mysqli_prepare($this->conexion, $sql2);
+        
+        if (!$stmt2) {
+            throw new Exception("Error al preparar 'registro': " . mysqli_error($this->conexion));
+        }
+        date_default_timezone_set('America/Montevideo');
+        $this->fecha = date('Y-m-d H:i:s');
+        $this->estado = 'Pendiente';
+        
+        // Corregido a 'sss'
+        $stmt2->bind_param('sss', $this->Mail, $this->fecha, $this->estado);
+        
+        if (!$stmt2->execute()) {
+            throw new Exception("Error al insertar en 'registro': " . $stmt2->error);
+        }
+        $stmt2->close();
+        
+        return true;
+
+    } catch (Exception $e) {
+        // Guardamos el error real en el archivo log del servidor
+        error_log("Error en crearUsuario: " . $e->getMessage());
+        
+        // Muestra el error exacto en pantalla para saber qué falló en 'registro'
+        echo "Error detectado: " . $e->getMessage(); 
+        
+        return false;
     }
+}
     
 //------------------------------------------------------------------------------------
 
@@ -138,12 +170,36 @@ class UsuarioModel
     //-------------------------------------------------------------------------------------
     
     public function actualizarEstadoUsuario($mail, $nuevoEstado){
-        $sql = "UPDATE Usuarios SET Estado = ?  WHERE Mail = ?";
+        $sql = "UPDATE registro SET estado = ?  WHERE mail = ?";
         $stmt = mysqli_prepare($this->conexion, $sql);
         mysqli_stmt_bind_param($stmt, "ss", $nuevoEstado, $mail);
-        $resultado = mysqli_stmt_get_result($stmt);
+        $resultado = mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
         return $resultado;
     }
-
+    public function buscarEstado($mail){
+        $sql = "SELECT * FROM registro WHERE Mail = ?";
+        $stmt = mysqli_prepare($this->conexion, $sql);
+        mysqli_stmt_bind_param($stmt, "s", $mail);
+        mysqli_stmt_execute($stmt);
+        $resultado = mysqli_stmt_get_result($stmt);
+        $estado = mysqli_fetch_assoc($resultado);
+        mysqli_stmt_close($stmt);
+        return $estado;
 }
+    public function getAllPendientes(){
+        $sql = "SELECT u.nombre, u.apellido, u.mail, r.estado FROM usuario u JOIN registro r ON u.mail = r.mail WHERE r.estado = 'Pendiente'";
+        $stmt = mysqli_prepare($this->conexion, $sql);
+        mysqli_stmt_execute($stmt);
+        $resultado = mysqli_stmt_get_result($stmt);
+
+        $usuariosPendientes = [];
+        while ($fila = mysqli_fetch_assoc($resultado)) {
+            $usuariosPendientes[] = $fila;
+        }
+
+        mysqli_stmt_close($stmt);
+        return $usuariosPendientes;
+    }
+}
+
