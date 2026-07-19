@@ -18,9 +18,27 @@
         </a>
     </div>
 
-    <div class="menu-toggle" onclick="toggleMenu()">
-        ☰
+
+    <div class="header-actions">
+
+        <div id="registro-btn">
+            <button onclick="window.location.href='registro.html'">
+                Registrar
+            </button>
+        </div>
+
+
+        <div id="usuario" class="usuario">
+
+        </div>
+
+
+        <div class="menu-toggle" onclick="toggleMenu()">
+            ☰
+        </div>
+
     </div>
+
 
     <nav id="menu">
 
@@ -38,6 +56,11 @@
                 </button>
             </li>
 
+            <li>
+                <button class="link-button" onclick="verificarAcceso('mapa.html')">
+                    Mapa
+                </button>
+            </li>
 
             <li>
                 <button class="link-button" onclick="verificarAcceso('estadisticas.html')">
@@ -45,8 +68,11 @@
                 </button>
             </li>
 
-
-            <li id="sesion"></li>
+            <li>
+                <button class="link-button" onclick="verificarAcceso('documentacion.html')">
+                    Documentación
+                </button>
+            </li>
 
         </ul>
 
@@ -54,11 +80,13 @@
 
 </header>
 
+
+
 <section class="contenido">
 
     <div class="texto">
 
-        <h4>texto 4</h4>
+        <h4>EPSILON</h4>
 
         <h2>
             Transformando <br>
@@ -72,11 +100,13 @@
             en tiempo real.
         </p>
 
+
         <div class="botones">
 
             <button onclick="verificarAcceso('mapa.html')">
                 Explorar Mapa
             </button>
+
 
             <button onclick="verificarAcceso('documentacion.html')">
                 Documentación
@@ -84,54 +114,122 @@
 
         </div>
 
+
     </div>
 
+
     <div class="imagen">
+
         <img src="fotocamion.png" alt="Camión">
+
     </div>
+
 
 </section>
 
+
+
+
 <script>
 
+
 function toggleMenu(){
-    document.getElementById("menu").classList.toggle("activo");
+
+    document
+    .getElementById("menu")
+    .classList.toggle("activo");
+
 }
+
+
 
 function verificarAcceso(destino){
 
     if(localStorage.getItem("logueado") === "si"){
+
         window.location.href = destino;
+
     }else{
+
         window.location.href = "login.html";
+
     }
 
 }
 
+
+
+
 function cerrarSesion(){
 
     localStorage.removeItem("logueado");
+
     location.reload();
 
 }
 
-const sesion = document.getElementById("sesion");
 
-if(localStorage.getItem("logueado") === "si"){
 
-    sesion.innerHTML =
-    `<button onclick="cerrarSesion()">Cerrar Sesión</button>`;
 
-}else{
 
-    sesion.innerHTML =
-    `<button onclick="window.location.href='login.html'">
-        Iniciar Sesión
-    </button>`;
+function cargarUsuario(){
+
+
+    const usuario =
+    document.getElementById("usuario");
+
+
+    const registro =
+    document.getElementById("registro-btn");
+
+
+
+    if(localStorage.getItem("logueado") === "si"){
+
+
+        registro.style.display = "none";
+
+
+        usuario.innerHTML = `
+
+        <button class="usuario-btn" onclick="abrirUsuario()">
+            👤
+        </button>
+
+        <div id="menuUsuario" class="menu-usuario">
+
+            <button onclick="cerrarSesion()">
+                Cerrar Sesión
+            </button>
+
+        </div>
+
+        `;
+
+
+    }
+
 
 }
 
+
+
+function abrirUsuario(){
+
+    document
+    .getElementById("menuUsuario")
+    .classList.toggle("activo");
+
+}
+
+
+
+cargarUsuario();
+
+
 </script>
 
+
 </body>
+
 </html>

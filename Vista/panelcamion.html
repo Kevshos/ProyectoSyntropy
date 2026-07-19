@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Gestión - Epsilon</title>
+    <title>Panel Camiones - Epsilon</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -25,7 +25,6 @@ if(localStorage.getItem("logueado") !== "si"){
 }
 
 </script>
-
 
 
 
@@ -83,22 +82,9 @@ if(localStorage.getItem("logueado") !== "si"){
             <li>
 
                 <button class="link-button"
-                onclick="window.location.href='rutas.html'">
+                onclick="window.location.href='panelregistro.html'">
 
-                    Rutas
-
-                </button>
-
-            </li>
-
-
-
-            <li>
-
-                <button class="link-button"
-                onclick="window.location.href='mapa.html'">
-
-                    Mapa
+                    Panel Registro
 
                 </button>
 
@@ -109,9 +95,9 @@ if(localStorage.getItem("logueado") !== "si"){
             <li>
 
                 <button class="link-button"
-                onclick="window.location.href='estadisticas.html'">
+                onclick="window.location.href='panelcontenedor.html'">
 
-                    Estadísticas
+                    Contenedores
 
                 </button>
 
@@ -122,9 +108,9 @@ if(localStorage.getItem("logueado") !== "si"){
             <li>
 
                 <button class="link-button"
-                onclick="window.location.href='documentacion.html'">
+                onclick="window.location.href='panelcamion.html'">
 
-                    Documentación
+                    Camiones
 
                 </button>
 
@@ -149,17 +135,19 @@ if(localStorage.getItem("logueado") !== "si"){
 <div class="pagina">
 
 
+
     <h2>
 
-        Gestión de Residuos
+        Panel Camiones
 
     </h2>
 
 
 
+
     <p>
 
-        Administración general del sistema Epsilon.
+        Administración de camiones registrados en el sistema.
 
     </p>
 
@@ -170,30 +158,83 @@ if(localStorage.getItem("logueado") !== "si"){
     <div class="panel">
 
 
+        <button>
 
-        <button onclick="window.location.href='panelregistro.html'">
-
-            Panel Registro
-
-        </button>
-
-
-
-
-        <button onclick="window.location.href='panelcontenedor.html'">
-
-            Panel Contenedores
+            Crear Camión
 
         </button>
 
 
 
 
-        <button onclick="window.location.href='panelcamion.html'">
+        <button>
 
-            Panel Camiones
+            Modificar Camión
 
         </button>
+
+
+
+
+        <button>
+
+            Eliminar Camión
+
+        </button>
+
+
+
+    </div>
+
+
+
+
+
+
+
+    <div class="lista-panel">
+
+
+
+        <h3>
+
+            Lista de Camiones
+
+        </h3>
+
+
+
+
+        <ul>
+
+
+
+            <li>
+
+                Camión ABC-123 - En servicio
+
+            </li>
+
+
+
+            <li>
+
+                Camión DEF-456 - Disponible
+
+            </li>
+
+
+
+            <li>
+
+                Camión GHI-789 - Mantenimiento
+
+            </li>
+
+
+
+        </ul>
+
 
 
 
