@@ -86,7 +86,7 @@ class UsuarioController
                 $this->modeloObj->registrarAcceso($estadoEncontrado['mail'], 'Exitoso');
                 unset($usuarioEncontrado['contrasena']);
                 $_SESSION['rol']=$usuarioEncontrado['rol'];
-                return ["status" => "success", "usuario" => $estadoEncontrado];
+                return ["status" => "success","mensaje" => "Login exitoso.","usuario" => $estadoEncontrado];
             }
             
         } else {
