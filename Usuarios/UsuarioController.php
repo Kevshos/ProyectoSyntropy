@@ -7,7 +7,7 @@ class UsuarioController
 	{
 		$conexionbd = mysqli_connect("localhost","root","","Syntropy");
 		if (!$conexionbd){
-			die("Error de conexion ". mysqli_connect_error());
+			die(json_encode(["status" => "error", "mensaje" => "Error de conexion ". mysqli_connect_error()]));
 		}
 		require "UsuarioModel.php";
 		$this->modeloObj = new UsuarioModel($conexionbd);
@@ -29,7 +29,6 @@ class UsuarioController
 		public function crearUsuario(){
 			$json = file_get_contents('php://input');
 		$datos = json_decode($json);
-//validar datos
 		if (!$datos || !isset($datos->mail) || !isset($datos->contrasenia) || !isset($datos->nombre) || !isset($datos->apellido)|| !isset($datos->usuario)) {
             return ["status" => "error", "mensaje" => "Faltan campos obligatorios o el JSON está mal formado."];
         }
@@ -53,7 +52,7 @@ class UsuarioController
 
 	//Login de usuario
 	public function loguearUsuario(){
-        if(session_start()=== PHP_SESSION_NONE){
+        if(session_status()=== PHP_SESSION_NONE){
             session_start();
         }
     $json = file_get_contents('php://input');
@@ -91,10 +90,12 @@ class UsuarioController
             }
             
         } else {
+            http_response_code(401);
             return ["status" => "error", "mensaje" => "Contraseña incorrecta"];
         }
         
     } else {
+            http_response_code(401);
         return ["status" => "error", "mensaje" => "Este usuario/mail no está registrado"];
     }
 }
