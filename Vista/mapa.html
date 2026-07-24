@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mapa - Epsilon</title>
     <link rel="stylesheet" href="style.css" />
-    <!-- Usamos CDNJS para mayor estabilidad y evitar errores 403 de unpkg -->
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -28,7 +27,13 @@
         </a>
       </div>
 
-      <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+      <div class="header-actions">
+
+        <div id="usuario" class="usuario"></div>
+
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
+      </div>
 
       <nav id="menu">
         <ul>
@@ -76,8 +81,6 @@
               Documentación
             </button>
           </li>
-
-          <li id="sesion"></li>
         </ul>
       </nav>
     </header>
@@ -106,8 +109,31 @@
         window.location.href = "index.html";
       }
 
-      const sesion = document.getElementById("sesion");
-      sesion.innerHTML = `<button onclick="cerrarSesion()">Cerrar Sesión</button>`;
+      function cargarUsuario(){
+
+          document.getElementById("usuario").innerHTML = `
+
+          <button class="usuario-btn" onclick="abrirUsuario()">
+              👤
+          </button>
+
+          <div id="menuUsuario" class="menu-usuario">
+
+              <button onclick="cerrarSesion()">
+                  Cerrar Sesión
+              </button>
+
+          </div>
+
+          `;
+
+      }
+
+      function abrirUsuario(){
+          document.getElementById("menuUsuario").classList.toggle("activo");
+      }
+
+      cargarUsuario();
 
       var map = L.map("map").setView([-34.9011, -56.1645], 13);
 

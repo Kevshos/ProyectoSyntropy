@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -24,6 +25,12 @@
         <div id="registro-btn">
             <button onclick="window.location.href='registro.html'">
                 Registrar
+            </button>
+        </div>
+
+        <div id="login-btn">
+            <button onclick="window.location.href='login.html'">
+                Iniciar Sesión
             </button>
         </div>
 
@@ -182,12 +189,16 @@ function cargarUsuario(){
     const registro =
     document.getElementById("registro-btn");
 
+    const login =
+    document.getElementById("login-btn");
+
 
 
     if(localStorage.getItem("logueado") === "si"){
 
 
         registro.style.display = "none";
+        login.style.display = "none";
 
 
         usuario.innerHTML = `
