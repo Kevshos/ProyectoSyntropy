@@ -280,6 +280,7 @@ function toggleMenu(){
 function cerrarSesion(){
 
     localStorage.removeItem("logueado");
+    localStorage.removeItem("nombreUsuario");
 
     window.location.href = "index.html";
 
@@ -288,10 +289,15 @@ function cerrarSesion(){
 
 function cargarUsuario(){
 
+    const nombre = localStorage.getItem("nombreUsuario") || "Usuario";
+    const inicial = nombre.charAt(0).toUpperCase();
+
     document.getElementById("usuario").innerHTML = `
 
+    <span class="nombre-usuario">${nombre}</span>
+
     <button class="usuario-btn" onclick="abrirUsuario()">
-        👤
+        ${inicial}
     </button>
 
     <div id="menuUsuario" class="menu-usuario">
@@ -320,13 +326,6 @@ cargarUsuario();
 
 
 </script>
-
-
-
-</body>
-
-</html>
-
 
 
 
