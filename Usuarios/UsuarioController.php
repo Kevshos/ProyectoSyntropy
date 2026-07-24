@@ -7,7 +7,7 @@ class UsuarioController
 	{
 		$conexionbd = mysqli_connect("localhost","root","","Syntropy");
 		if (!$conexionbd){
-			die("Error de conexion ". mysqli_connect_error());
+			die(json_encode(["status" => "error", "mensaje" => "Error de conexion ". mysqli_connect_error()]));
 		}
 		require "UsuarioModel.php";
 		$this->modeloObj = new UsuarioModel($conexionbd);
@@ -29,7 +29,6 @@ class UsuarioController
 		public function crearUsuario(){
 			$json = file_get_contents('php://input');
 		$datos = json_decode($json);
-//validar datos
 		if (!$datos || !isset($datos->mail) || !isset($datos->contrasenia) || !isset($datos->nombre) || !isset($datos->apellido)|| !isset($datos->usuario)) {
             return ["status" => "error", "mensaje" => "Faltan campos obligatorios o el JSON está mal formado."];
         }
@@ -53,6 +52,9 @@ class UsuarioController
 
 	//Login de usuario
 	public function loguearUsuario(){
+        if(session_status()=== PHP_SESSION_NONE){
+            session_start();
+        }
     $json = file_get_contents('php://input');
     $datos = json_decode($json);
     
@@ -69,26 +71,31 @@ class UsuarioController
     if ($usuarioEncontrado) {
         
         if (password_verify($datos->contrasenia, $usuarioEncontrado['contrasena'])) {
+            $estadoEncontrado = null;
+            $estadoEncontrado = $this->modeloObj->buscarEstado($usuarioEncontrado['mail']);
             
-            if ($usuarioEncontrado['estado'] === 'Pendiente') {
-                $this->modeloObj->registrarAcceso($usuarioEncontrado['mail'], 'Fallido - Cuenta pendiente');
+            if ($estadoEncontrado['estado'] === 'Pendiente') {
+                $this->modeloObj->registrarAcceso($estadoEncontrado['mail'], 'Fallido - Cuenta pendiente');
                 return ["status" => "error", "mensaje" => "Cuenta pendiente."];
                 
-            } elseif ($usuarioEncontrado['estado'] === 'Rechazado') {
-                $this->modeloObj->registrarAcceso($usuarioEncontrado['mail'], 'Fallido - Cuenta rechazada');
+            } elseif ($estadoEncontrado['estado'] === 'Rechazado') {
+                $this->modeloObj->registrarAcceso($estadoEncontrado['mail'], 'Fallido - Cuenta rechazada');
                 return ["status" => "error", "mensaje" => "Cuenta rechazada."];
                 
             } else {
-                $this->modeloObj->registrarAcceso($usuarioEncontrado['mail'], 'Exitoso');
+                $this->modeloObj->registrarAcceso($estadoEncontrado['mail'], 'Exitoso');
                 unset($usuarioEncontrado['contrasena']);
-                return ["status" => "success", "usuario" => $usuarioEncontrado];
+                $_SESSION['rol']=$usuarioEncontrado['rol'];
+                return ["status" => "success","mensaje" => "Login exitoso.","usuario" => $estadoEncontrado];
             }
             
         } else {
+            http_response_code(401);
             return ["status" => "error", "mensaje" => "Contraseña incorrecta"];
         }
         
     } else {
+            http_response_code(401);
         return ["status" => "error", "mensaje" => "Este usuario/mail no está registrado"];
     }
 }
@@ -114,5 +121,11 @@ class UsuarioController
         return ["status" => "success", "mensaje" => "Usuario " . strtolower($datos->decision) . " con éxito."];
     }
     return ["status" => "error", "mensaje" => "No se pudo procesar la solicitud."];
+}
+public function getAllPendientes(){
+    $json = file_get_contents('php://input');
+    $datos = json_decode($json);
+
+    return $this->modeloObj->getAllPendientes();
 }
 }
