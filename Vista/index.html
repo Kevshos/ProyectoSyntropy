@@ -23,26 +23,25 @@
 
     <div class="header-actions">
 
+      <div class="header-actions">
         <div id="registro-btn">
-            <button onclick="window.location.href='registro.html'">
-                Registrar
-            </button>
+          <button onclick="window.location.href = 'registro.html'">
+            Registrar
+          </button>
         </div>
 
-
-        <div id="usuario" class="usuario">
-
+        <div id="login-btn">
+          <button onclick="window.location.href = 'login.html'">
+            Iniciar Sesión
+          </button>
         </div>
 
+        <div id="usuario" class="usuario"></div>
 
-        <div class="menu-toggle" onclick="toggleMenu()">
-            ☰
-        </div>
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+      </div>
 
-    </div>
-
-
-    <nav id="menu">
+      <nav id="menu">
         <ul>
           <li>
             <button
@@ -52,55 +51,42 @@
               Gestión
             </button>
           </li>
+
           <li>
-            <button
-              id="btnAdmin"
-              class="link-button"
-              onclick="verificarAcceso('panel_registro.html')"
-            >
-              Panel de Registro
+            <button class="link-button" onclick="verificarAcceso('rutas.html')">
+              Rutas
             </button>
           </li>
-            <li>
-                <button class="link-button" onclick="verificarAcceso('rutas.html')">
-                    Rutas
-                </button>
-            </li>
 
-            <li>
-                <button class="link-button" onclick="verificarAcceso('mapa.html')">
-                    Mapa
-                </button>
-            </li>
+          <li>
+            <button class="link-button" onclick="verificarAcceso('mapa.html')">
+              Mapa
+            </button>
+          </li>
 
-            <li>
-                <button class="link-button" onclick="verificarAcceso('estadisticas.html')">
-                    Estadísticas
-                </button>
-            </li>
+          <li>
+            <button
+              class="link-button"
+              onclick="verificarAcceso('estadisticas.html')"
+            >
+              Estadísticas
+            </button>
+          </li>
 
-            <li>
-                <button class="link-button" onclick="verificarAcceso('documentacion.html')">
-                    Documentación
-                </button>
-            </li>
-
-          <li id="sesion"></li>
+          <li>
+            <button
+              class="link-button"
+              onclick="verificarAcceso('documentacion.html')"
+            >
+              Documentación
+            </button>
+          </li>
         </ul>
       </nav>
     </header>
 
-        <h4>texto 4</h4>
-
-    </nav>
-
-</header>
-
-
-
-<section class="contenido">
-
-    <div class="texto">
+    <section class="contenido">
+      <div class="texto">
         <h4>EPSILON</h4>
 
         <h2>
@@ -114,102 +100,60 @@
           residuos en tiempo real.
         </p>
 
-
         <div class="botones">
           <button onclick="verificarAcceso('mapa.html')">Explorar Mapa</button>
 
-            <button onclick="verificarAcceso('mapa.html')">
-                Explorar Mapa
-            </button>
-
-
-            <button onclick="verificarAcceso('documentacion.html')">
-                Documentación
-            </button>
-
+          <button onclick="verificarAcceso('documentacion.html')">
+            Documentación
+          </button>
         </div>
       </div>
 
+      <div class="imagen">
+        <img src="fotocamion.png" alt="Camión" />
+      </div>
+    </section>
 
-    </div>
+    <script>
+      function toggleMenu() {
+        document.getElementById("menu").classList.toggle("activo");
+      }
 
+      function verificarAcceso(destino) {
+        if (localStorage.getItem("logueado") === "si") {
+          window.location.href = destino;
+        } else {
+          window.location.href = "login.html";
+        }
+      }
 
-    <div class="imagen">
+      function cerrarSesion() {
+        localStorage.removeItem("logueado");
+        localStorage.removeItem("nombreUsuario");
 
-        <img src="fotocamion.png" alt="Camión">
+        location.reload();
+      }
 
-    </div>
+      function cargarUsuario() {
+        const usuario = document.getElementById("usuario");
 
+        const registro = document.getElementById("registro-btn");
 
-</section>
+        const login = document.getElementById("login-btn");
 
+        if (localStorage.getItem("logueado") === "si") {
+          registro.style.display = "none";
+          login.style.display = "none";
 
+          const nombre = localStorage.getItem("nombreUsuario") || "Usuario";
+          const inicial = nombre.charAt(0).toUpperCase();
 
+          usuario.innerHTML = `
 
-<script>
-
-
-function toggleMenu(){
-
-    document
-    .getElementById("menu")
-    .classList.toggle("activo");
-
-}
-
-
-
-function verificarAcceso(destino){
-
-    if(localStorage.getItem("logueado") === "si"){
-
-        window.location.href = destino;
-
-    }else{
-
-        window.location.href = "login.html";
-
-    }
-
-}
-
-
-
-
-function cerrarSesion(){
-
-    localStorage.removeItem("logueado");
-
-    location.reload();
-
-}
-
-
-
-
-
-function cargarUsuario(){
-
-
-    const usuario =
-    document.getElementById("usuario");
-
-
-    const registro =
-    document.getElementById("registro-btn");
-
-
-
-    if(localStorage.getItem("logueado") === "si"){
-
-
-        registro.style.display = "none";
-
-
-        usuario.innerHTML = `
+        <span class="nombre-usuario">${nombre}</span>
 
         <button class="usuario-btn" onclick="abrirUsuario()">
-            👤
+            ${inicial}
         </button>
 
         <div id="menuUsuario" class="menu-usuario">
@@ -221,7 +165,12 @@ function cargarUsuario(){
         </div>
 
         `;
+        }
+      }
 
+      function abrirUsuario() {
+        document.getElementById("menuUsuario").classList.toggle("activo");
+      }
 
     }
 
