@@ -24,14 +24,8 @@ if(localStorage.getItem("logueado") !== "si"){
         </a>
     </div>
 
-    <div class="header-actions">
-
-        <div id="usuario" class="usuario"></div>
-
-        <div class="menu-toggle" onclick="toggleMenu()">
-            ☰
-        </div>
-
+    <div class="menu-toggle" onclick="toggleMenu()">
+        ☰
     </div>
 
     <nav id="menu">
@@ -73,6 +67,8 @@ if(localStorage.getItem("logueado") !== "si"){
                 </button>
             </li>
 
+            <li id="sesion"></li>
+
         </ul>
 
     </nav>
@@ -112,35 +108,21 @@ function toggleMenu(){
 }
 
 function cerrarSesion(){
+
     localStorage.removeItem("logueado");
-    window.location.href = "index.html";
-}
 
-function cargarUsuario(){
-
-    document.getElementById("usuario").innerHTML = `
-
-    <button class="usuario-btn" onclick="abrirUsuario()">
-        👤
-    </button>
-
-    <div id="menuUsuario" class="menu-usuario">
-
-        <button onclick="cerrarSesion()">
-            Cerrar Sesión
-        </button>
-
-    </div>
-
-    `;
+    window.location.href =
+    "index.html";
 
 }
 
-function abrirUsuario(){
-    document.getElementById("menuUsuario").classList.toggle("activo");
-}
+const sesion =
+document.getElementById("sesion");
 
-cargarUsuario();
+sesion.innerHTML =
+`<button onclick="cerrarSesion()">
+    Cerrar Sesión
+</button>`;
 
 </script>
 

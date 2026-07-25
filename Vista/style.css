@@ -348,11 +348,11 @@ nav button:not(.link-button):hover {
 ========================= */
 #map {
   width: 100%;
-  height: 500px;
+  height: 500px; /* Vital para que no colapse en 0px */
   border-radius: 15px;
   margin-top: 30px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  z-index: 1;
+  z-index: 1; /* Para que quede por debajo del menú desplegable de navegación */
 }
 
 /* =========================
@@ -490,7 +490,7 @@ nav button:not(.link-button):hover {
     width: 220px;
   }
   #map {
-    height: 350px;
+    height: 350px; /* Ajuste cómodo para pantallas móviles */
   }
 }
 /* =========================
@@ -508,19 +508,26 @@ nav button:not(.link-button):hover {
 ========================= */
 
 #registro-btn button {
-    background: #2f8f3a;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
+  background: #2f8f3a;
+  color: white;
+
+  border: none;
+
+  padding: 12px 20px;
+
+  border-radius: 10px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.3s;
 }
 
 #registro-btn button:hover {
-    background: #267530;
-    transform: translateY(-2px);
+  background: #267530;
+
+  transform: translateY(-2px);
 }
 
 /* =========================
@@ -528,24 +535,33 @@ nav button:not(.link-button):hover {
 ========================= */
 
 .usuario {
-    position: relative;
+  position: relative;
 }
 
 .usuario-btn {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    border: none;
-    background: #eef7ef;
-    color: #2f8f3a;
-    font-size: 24px;
-    cursor: pointer;
-    transition: 0.3s;
+  width: 45px;
+
+  height: 45px;
+
+  border-radius: 50%;
+
+  border: none;
+
+  background: #eef7ef;
+
+  color: #2f8f3a;
+
+  font-size: 24px;
+
+  cursor: pointer;
+
+  transition: 0.3s;
 }
 
 .usuario-btn:hover {
-    background: #2f8f3a;
-    color:white;
+  background: #2f8f3a;
+
+  color: white;
 }
 
 /* =========================
@@ -553,84 +569,102 @@ nav button:not(.link-button):hover {
 ========================= */
 
 .menu-usuario {
-    display:none;
-    position:absolute;
-    right:0;
-    top:55px;
-    width:180px;
-    background:white;
-    padding:12px;
-    border-radius:15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    z-index:2000;
+  display: none;
+
+  position: absolute;
+
+  right: 0;
+
+  top: 55px;
+
+  width: 180px;
+
+  background: white;
+
+  padding: 12px;
+
+  border-radius: 15px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+  z-index: 2000;
 }
 
 .menu-usuario.activo {
-    display:block;
+  display: block;
 }
 
 .menu-usuario button {
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:10px;
-    background:#2f8f3a;
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
+  width: 100%;
+
+  padding: 12px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #2f8f3a;
+
+  color: white;
+
+  font-weight: bold;
+
+  cursor: pointer;
 }
 
 .menu-usuario button:hover {
-    background:#267530;
+  background: #267530;
 }
 
 /* =========================
    MOVIL
 ========================= */
 
-@media(max-width:768px){
-    .header-actions{
-        gap:8px;
-    }
+@media (max-width: 768px) {
+  .header-actions {
+    gap: 8px;
+  }
 
-    #registro-btn button{
-        padding:10px 12px;
-        font-size:14px;
-    }
+  #registro-btn button {
+    padding: 10px 12px;
 
-    #login-btn button{
-        padding:10px 12px;
-        font-size:14px;
-    }
+    font-size: 14px;
+  }
 }
 /* =========================
    LISTAS PANELES
 ========================= */
 
-.lista-panel{
-    margin-top:40px;
-    background:white;
-    padding:25px;
-    border-radius:15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+.lista-panel {
+  margin-top: 40px;
+
+  background: white;
+
+  padding: 25px;
+
+  border-radius: 15px;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
-.lista-panel h3{
-    color:#1c2745;
-    margin-bottom:20px;
+.lista-panel h3 {
+  color: #1c2745;
+
+  margin-bottom: 20px;
 }
 
-.lista-panel ul{
-    list-style:none;
+.lista-panel ul {
+  list-style: none;
 }
 
-.lista-panel li{
-    padding:15px;
-    background:#f4f6f9;
-    margin-bottom:10px;
-    border-radius:10px;
-    color:#555;
-}
+.lista-panel li {
+  padding: 15px;
 
-/* =========================
-   BOTON INICIAR SESION
+  background: #f4f6f9;
+
+  margin-bottom: 10px;
+
+  border-radius: 10px;
+
+  color: #555;
+}
