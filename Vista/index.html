@@ -29,6 +29,12 @@
             </button>
         </div>
 
+        <div id="login-btn">
+            <button onclick="window.location.href='login.html'">
+                Iniciar Sesión
+            </button>
+        </div>
+
 
         <div id="usuario" class="usuario">
 
@@ -179,6 +185,7 @@ function verificarAcceso(destino){
 function cerrarSesion(){
 
     localStorage.removeItem("logueado");
+    localStorage.removeItem("nombreUsuario");
 
     location.reload();
 
@@ -198,18 +205,27 @@ function cargarUsuario(){
     const registro =
     document.getElementById("registro-btn");
 
+    const login =
+    document.getElementById("login-btn");
+
 
 
     if(localStorage.getItem("logueado") === "si"){
 
 
         registro.style.display = "none";
+        login.style.display = "none";
+
+        const nombre = localStorage.getItem("nombreUsuario") || "Usuario";
+        const inicial = nombre.charAt(0).toUpperCase();
 
 
         usuario.innerHTML = `
 
+        <span class="nombre-usuario">${nombre}</span>
+
         <button class="usuario-btn" onclick="abrirUsuario()">
-            👤
+            ${inicial}
         </button>
 
         <div id="menuUsuario" class="menu-usuario">

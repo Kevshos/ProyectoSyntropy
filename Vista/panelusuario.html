@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Panel Camiones - Epsilon</title>
+    <title>Panel de Usuario - Epsilon</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -56,7 +56,6 @@ if(localStorage.getItem("logueado") !== "si"){
 
 
     </div>
-
 
 
 
@@ -144,27 +143,23 @@ if(localStorage.getItem("logueado") !== "si"){
 
 
 
-
-
 <div class="pagina">
 
 
 
     <h2>
 
-        Panel Camiones
+        Panel de Usuario
 
     </h2>
 
 
 
-
     <p>
 
-        Administración de camiones registrados en el sistema.
+        Administración de usuarios del sistema.
 
     </p>
-
 
 
 
@@ -174,34 +169,27 @@ if(localStorage.getItem("logueado") !== "si"){
 
         <button>
 
-            Crear Camión
+            Crear Usuario
 
         </button>
 
 
+        <button onclick="abrirModalUsuarios()">
 
-
-        <button>
-
-            Modificar Camión
+            Modificar Usuario
 
         </button>
 
 
-
-
         <button>
 
-            Eliminar Camión
+            Eliminar Usuario
 
         </button>
 
 
 
     </div>
-
-
-
 
 
 
@@ -209,23 +197,20 @@ if(localStorage.getItem("logueado") !== "si"){
     <div class="lista-panel">
 
 
-
         <h3>
 
-            Lista de Camiones
+            Lista de Usuarios
 
         </h3>
-
 
 
 
         <ul>
 
 
-
             <li>
 
-                Camión ABC-123 - En servicio
+                Juan Pérez - Activo
 
             </li>
 
@@ -233,7 +218,7 @@ if(localStorage.getItem("logueado") !== "si"){
 
             <li>
 
-                Camión DEF-456 - Disponible
+                Ana López - Activo
 
             </li>
 
@@ -241,14 +226,12 @@ if(localStorage.getItem("logueado") !== "si"){
 
             <li>
 
-                Camión GHI-789 - Mantenimiento
+                Carlos Rodríguez - Suspendido
 
             </li>
-
 
 
         </ul>
-
 
 
 
@@ -256,12 +239,29 @@ if(localStorage.getItem("logueado") !== "si"){
 
 
 
-
 </div>
 
 
 
+<!-- Ventana flotante para modificar usuario -->
 
+<div class="overlay" id="overlayUsuarios" onclick="cerrarModalUsuarios(event)">
+
+    <div class="modal-usuarios">
+
+        <h3>Seleccionar Usuario a Modificar</h3>
+
+        <ul>
+
+            <li onclick="seleccionarUsuario('Juan Pérez')">Juan Pérez</li>
+            <li onclick="seleccionarUsuario('Ana López')">Ana López</li>
+            <li onclick="seleccionarUsuario('Carlos Rodríguez')">Carlos Rodríguez</li>
+
+        </ul>
+
+    </div>
+
+</div>
 
 
 
@@ -323,6 +323,39 @@ function abrirUsuario(){
 
 
 cargarUsuario();
+
+
+function abrirModalUsuarios(){
+
+    document
+    .getElementById("overlayUsuarios")
+    .classList.add("activo");
+
+}
+
+
+function cerrarModalUsuarios(evento){
+
+    if(evento.target.id === "overlayUsuarios"){
+
+        document
+        .getElementById("overlayUsuarios")
+        .classList.remove("activo");
+
+    }
+
+}
+
+
+function seleccionarUsuario(nombre){
+
+    alert("Modificando a: " + nombre);
+
+    document
+    .getElementById("overlayUsuarios")
+    .classList.remove("activo");
+
+}
 
 
 </script>
