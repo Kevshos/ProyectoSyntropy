@@ -2,46 +2,26 @@
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Panel Registro - Epsilon</title>
-
     <link rel="stylesheet" href="style.css">
-
 </head>
-
 
 <body>
 
-
 <script>
-
-if(localStorage.getItem("logueado") !== "si"){
-
-    window.location.href = "login.html";
-
-}
-
+    if (localStorage.getItem("logueado") !== "si") {
+        window.location.href = "login.html";
+    }
 </script>
 
-
-
 <header>
-
-
     <div class="logo">
-
         <a href="index.html">
-
             <img src="logo.png" alt="Epsilon">
-
         </a>
-
     </div>
-
-
 
     <div class="header-actions">
 
@@ -56,11 +36,7 @@ if(localStorage.getItem("logueado") !== "si"){
 
     </div>
 
-
-
     <nav id="menu">
-
-
         <ul>
 
 
@@ -130,118 +106,20 @@ if(localStorage.getItem("logueado") !== "si"){
 
 
         </ul>
-
-
     </nav>
-
-
 </header>
 
-
-
-
-
 <div class="pagina">
-
-
-
-    <h2>
-
-        Panel Registro
-
-    </h2>
-
-
-
-    <p>
-
-        Administración de usuarios pendientes de confirmación.
-
-    </p>
-
-
-
-
-    <div class="panel">
-
-
-        <button>
-
-            Crear Usuario
-
-        </button>
-
-
-        <button>
-
-            Modificar Usuario
-
-        </button>
-
-
-        <button>
-
-            Eliminar Usuario
-
-        </button>
-
-
-
-    </div>
-
-
-
+    <h2>Panel Registro</h2>
+    <p>Administración de usuarios pendientes de confirmación.</p>
 
     <div class="lista-panel">
-
-
-        <h3>
-
-            Usuarios pendientes
-
-        </h3>
-
-
-
-        <ul>
-
-
-            <li>
-
-                Juan Pérez - Pendiente
-
-            </li>
-
-
-
-            <li>
-
-                Ana López - Pendiente
-
-            </li>
-
-
-
-            <li>
-
-                Carlos Rodríguez - Pendiente
-
-            </li>
-
-
-        </ul>
-
-
-
+        <h3>Usuarios pendientes</h3>
+        <div id="listaUsuarios">
+            <p>Cargando usuarios...</p>
+        </div>
     </div>
-
-
-
 </div>
-
-
-
-
 
 <script>
 
@@ -305,8 +183,5 @@ cargarUsuario();
 
 </script>
 
-
-
 </body>
-
 </html>

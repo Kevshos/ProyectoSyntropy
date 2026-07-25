@@ -1,5 +1,16 @@
 <?php
-header('Content-Type: application/json');
+error_reporting(0); 
+ini_set('display_errors', 0);
+
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: GET, POST, DELETE, PATCH, OPTIONS");
+header("Content-Type: application/json; charset=UTF-8");
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 require_once 'UsuarioController.php';
 $controladorObj = new UsuarioController();
 
@@ -13,6 +24,9 @@ switch ($method) {
 		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Usuarios'){
 					
 			echo json_encode( $controladorObj->getAllUsuarios() );
+		}
+		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/ListarPendientes'){
+			echo json_encode( $controladorObj->getAllPendientes() );
 		}
 
 		//Buscar usuario
@@ -60,6 +74,11 @@ break;
 		} else{
 			echo json_encode(['error'=> 'Faltan ingresar mail']);
 		}
+		break;
+		case 'PATCH';
+		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Actualizar'){
+			echo json_encode($controladorObj->responderSolicitud());
+			}
 		break;
     default:
         http_response_code(405);
