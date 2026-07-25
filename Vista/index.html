@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Epsilon</title>
     <link rel="stylesheet" href="style.css" />
+    <style>
+      #btnAdmin {
+        display: none;
+      }
+    </style>
   </head>
 
   <body>
@@ -14,6 +19,9 @@
           <img src="logo.png" alt="Epsilon" />
         </a>
       </div>
+
+
+    <div class="header-actions">
 
       <div class="header-actions">
         <div id="registro-btn">
@@ -164,7 +172,29 @@
         document.getElementById("menuUsuario").classList.toggle("activo");
       }
 
-      cargarUsuario();
-    </script>
-  </body>
+    }
+
+
+}
+
+
+
+function abrirUsuario(){
+
+    document
+    .getElementById("menuUsuario")
+    .classList.toggle("activo");
+
+}
+
+
+
+cargarUsuario();
+
+
+</script>
+
+
+</body>
+
 </html>

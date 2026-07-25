@@ -2,10 +2,12 @@
 class ContenedorModel
 {
     private $idContenedor;
-    private $CapCarga;
-    private $Estado;
-    private $Tipo;
-    private $Ubicacion;
+    private $capacidadCarga;
+    private $estado;
+    private $tipo;
+    private $calle;
+    private $numero;
+    private $barrio;
     private $conexion;
 
     public function __construct($bd)
@@ -15,7 +17,7 @@ class ContenedorModel
 
     public function getAllContenedores()
     {
-        $sql = "SELECT idContenedor, Estado FROM Contenedores";
+        $sql = "SELECT ID_contenedor, estado FROM contenedores";
         $stmt = mysqli_prepare($this->conexion, $sql);
         mysqli_stmt_execute($stmt);
         $resultado = mysqli_stmt_get_result($stmt);
@@ -31,7 +33,7 @@ class ContenedorModel
 
     public function buscarContenedor($id)
     {
-        $sql = "SELECT idContenedor, CapCarga, Tipo, Estado, Ubicacion FROM Camiones WHERE idContenedor = ?";
+        $sql = "SELECT ID_contenedor, capacidadCarga, tipo, estado, calle, numero, barrio FROM contenedor WHERE idContenedor = ?";
         $stmt = mysqli_prepare($this->conexion, $sql);
         mysqli_stmt_bind_param($stmt, "s", $id);
         mysqli_stmt_execute($stmt);
@@ -41,15 +43,17 @@ class ContenedorModel
         mysqli_stmt_close($stmt);
         return $contenedor;
     }
-    public function crearContenedor($cap, $t, $e, $u){
-            $sql = "INSERT INTO Contenedores (CapCarga, Tipo, Estado, Ubicacion) VALUES (?,?,?,?)";
+    public function crearContenedor($cap, $t, $e, $c, $n,$b){
+            $sql = "INSERT INTO contenedor (capacidadCarga, tipo, estado, calle, numero, barrio) VALUES (?,?,?,?,?,?)";
             $stmt = mysqli_prepare($this->conexion, $sql);
-            $this->CapCarga = $cap;
-            $this->Tipo = $t;
-            $this->Estado = $e;
-            $this->Ubicacion = $u;
+            $this->capacidadCarga = $cap;
+            $this->tipo = $t;
+            $this->estado = $e;
+            $this->calle = $c;
+            $this->numero = $n;
+            $this->barrio = $b;
 
-            $stmt->bind_param('isss', $this->CapCarga, $this->Tipo, $this->Estado, $this->Ubicacion);
+            $stmt->bind_param('isssis', $this->capacidadCarga, $this->tipo, $this->estado, $this->calle, $this->numero, $this->barrio);
             if($stmt->execute()){
                 $stmt->close();
                 return true;
@@ -58,5 +62,23 @@ class ContenedorModel
                 return false;
             }
 
+        }
+        public function eliminarContenedor($id)
+        {
+            $sql = "DELETE FROM contenedor WHERE ID_contenedor = ?";
+            $stmt = mysqli_prepare($this->conexion, $sql);
+            mysqli_stmt_bind_param($stmt, "i", $id);
+            $resultado = mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+            return $resultado;
+        }
+        public function actualizarContenedor($id, $cap, $t, $e, $c, $n, $b)
+        {
+            $sql = "UPDATE contenedor SET capacidadCarga = ?, tipo = ?, estado = ?, calle = ?, numero = ?, barrio = ? WHERE ID_contenedor = ?";
+            $stmt = mysqli_prepare($this->conexion, $sql);
+            mysqli_stmt_bind_param($stmt, "isssisi", $cap, $t, $e, $c, $n, $b, $id);
+            $resultado = mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+            return $resultado;
         }
 }
