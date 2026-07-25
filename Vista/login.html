@@ -63,6 +63,7 @@
                 "¡Solicitud de Login enviada con exito!" +
                   (result.mensaje || ""),
               );
+              localStorage.setItem("logueado", "si");
               window.location.href = "index.html";
             } else {
               alert(`Error: ${result.error || "No se pudo Loguear"}`);
