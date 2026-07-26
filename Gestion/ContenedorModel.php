@@ -17,7 +17,7 @@ class ContenedorModel
 
     public function getAllContenedores()
     {
-        $sql = "SELECT ID_contenedor, estado FROM contenedores";
+        $sql = "SELECT ID_contenedor, tipo, capacidadCarga, estado, calle, numero, barrio FROM contenedor";
         $stmt = mysqli_prepare($this->conexion, $sql);
         mysqli_stmt_execute($stmt);
         $resultado = mysqli_stmt_get_result($stmt);

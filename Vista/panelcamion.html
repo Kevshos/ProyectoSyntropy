@@ -1,334 +1,371 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-
-<head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Panel Camiones - Epsilon</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-</head>
+  <body>
+    <script>
+      if (localStorage.getItem("logueado") !== "si") {
+        window.location.href = "login.html";
+      }
+    </script>
 
-
-<body>
-
-
-<script>
-
-if(localStorage.getItem("logueado") !== "si"){
-
-    window.location.href = "login.html";
-
-}
-
-</script>
-
-
-
-<header>
-
-
-    <div class="logo">
-
+    <header>
+      <div class="logo">
         <a href="index.html">
-
-            <img src="logo.png" alt="Epsilon">
-
+          <img src="logo.png" alt="Epsilon" />
         </a>
+      </div>
 
-    </div>
-
-
-
-
-    <div class="header-actions">
-
+      <div class="header-actions">
         <div id="usuario" class="usuario"></div>
 
-        <div class="menu-toggle" onclick="toggleMenu()">
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+      </div>
 
-            ☰
+      <nav id="menu">
+        <ul>
+          <li>
+            <button
+              class="link-button"
+              onclick="window.location.href = 'gestion.html'"
+            >
+              Gestión
+            </button>
+          </li>
 
+          <li>
+            <button
+              class="link-button"
+              onclick="window.location.href = 'panelregistro.html'"
+            >
+              Panel Registro
+            </button>
+          </li>
+
+          <li>
+            <button
+              class="link-button"
+              onclick="window.location.href = 'panelcontenedor.html'"
+            >
+              Contenedores
+            </button>
+          </li>
+
+          <li>
+            <button
+              class="link-button"
+              onclick="window.location.href = 'panelcamion.html'"
+            >
+              Camiones
+            </button>
+          </li>
+
+          <li>
+            <button
+              class="link-button"
+              onclick="window.location.href = 'panelusuario.html'"
+            >
+              Panel de Usuario
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="pagina">
+      <h2>Panel Camiones</h2>
+
+      <p>Administración de camiones registrados en el sistema.</p>
+
+      <div class="panel" id="OverlayCrearCamion" onclick="abrirCrearCamion()">
+        <button>Crear Camión</button>
+      </div>
+      <div class="overlay" id="overlayCrearCamiones">
+        <div class="crear-camion">
+          <h3>Crear Camión</h3>
+          <form id="formCrearCamion">
+            <label>Patente</label>
+            <input id="patenteCrear" required />
+
+            <label>Capacidad</label>
+            <input id="capacidadCrearCamion" type="number" />
+
+            <label>Estado</label>
+            <input
+              id="estadoCrearCamion"
+              placeholder="Ej: En servicio, Disponible, Mantenimiento"
+              required
+            />
+
+            <button class="btn-crear-camion" type="submit">
+              Crear Camión
+            </button>
+            <button
+              class="btn-cancelar-usuario"
+              type="button"
+              onclick="
+                document
+                  .getElementById('overlayCrearCamiones')
+                  .classList.remove('activo')
+              "
+            >
+              Cancelar
+            </button>
+          </form>
         </div>
+      </div>
 
-
-    </div>
-
-
-
-
-
-    <nav id="menu">
-
-
-        <ul>
-
-
-            <li>
-
-                <button class="link-button"
-                onclick="window.location.href='gestion.html'">
-
-                    Gestión
-
-                </button>
-
-            </li>
-
-
-
-            <li>
-
-                <button class="link-button"
-                onclick="window.location.href='panelregistro.html'">
-
-                    Panel Registro
-
-                </button>
-
-            </li>
-
-
-
-            <li>
-
-                <button class="link-button"
-                onclick="window.location.href='panelcontenedor.html'">
-
-                    Contenedores
-
-                </button>
-
-            </li>
-
-
-
-            <li>
-
-                <button class="link-button"
-                onclick="window.location.href='panelcamion.html'">
-
-                    Camiones
-
-                </button>
-
-            </li>
-
-
-
-            <li>
-
-                <button class="link-button"
-                onclick="window.location.href='panelusuario.html'">
-
-                    Panel de Usuario
-
-                </button>
-
-            </li>
-
-
-
+      <div class="lista-panel">
+        <h3>Lista de Camiones</h3>
+        <ul id="listaCamiones">
+          <p>Cargando camiones...</p>
         </ul>
-
-
-    </nav>
-
-
-</header>
-
-
-
-
-
-
-
-<div class="pagina">
-
-
-
-    <h2>
-
-        Panel Camiones
-
-    </h2>
-
-
-
-
-    <p>
-
-        Administración de camiones registrados en el sistema.
-
-    </p>
-
-
-
-
-
-    <div class="panel">
-
-
-        <button>
-
-            Crear Camión
-
-        </button>
-
-
-
-
-        <button>
-
-            Modificar Camión
-
-        </button>
-
-
-
-
-        <button>
-
-            Eliminar Camión
-
-        </button>
-
-
-
+      </div>
     </div>
 
+    <div
+      class="overlay"
+      id="overlayCamiones"
+      onclick="cerrarModalCamiones(event)"
+    >
+      <div class="modal-camiones">
+        <h3>Modificar camión</h3>
 
+        <form id="formModificarCamion">
+          <input type="hidden" id="patenteOriginal" />
 
+          <label>Capacidad</label>
+          <input
+            id="capacidadEditarCamion"
+            type="number"
+            placeholder="Dejar vacío para no modificar"
+          />
 
+          <label>Estado</label>
+          <input
+            id="estadoEditarCamion"
+            placeholder="Dejar vacío para no modificar"
+          />
 
-
-
-    <div class="lista-panel">
-
-
-
-        <h3>
-
-            Lista de Camiones
-
-        </h3>
-
-
-
-
-        <ul>
-
-
-
-            <li>
-
-                Camión ABC-123 - En servicio
-
-            </li>
-
-
-
-            <li>
-
-                Camión DEF-456 - Disponible
-
-            </li>
-
-
-
-            <li>
-
-                Camión GHI-789 - Mantenimiento
-
-            </li>
-
-
-
-        </ul>
-
-
-
-
+          <button class="btn-guardar-usuario" type="submit">
+            Guardar cambios
+          </button>
+          <button
+            class="btn-cancelar-usuario"
+            type="button"
+            onclick="
+              document
+                .getElementById('overlayCamiones')
+                .classList.remove('activo')
+            "
+          >
+            Cancelar
+          </button>
+        </form>
+      </div>
     </div>
 
+    <script>
+      // TODO: ajustar la base de la URL a la carpeta real de tu API de Camiones
+      const API_URL =
+        "http://localhost/Proyecto/ProyectoSyntropy/Camiones/miApi/";
+      let camiones = [];
 
+      document
+        .getElementById("formModificarCamion")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
 
+          const datos = {
+            patente: document.getElementById("patenteOriginal").value,
+            capacidad: document.getElementById("capacidadEditarCamion").value,
+            estado: document.getElementById("estadoEditarCamion").value,
+          };
 
-</div>
+          const resp = await fetch(`${API_URL}Modificar`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(datos),
+          });
 
+          const resultado = await resp.json();
 
+          if (resultado.status === "success") {
+            document
+              .getElementById("overlayCamiones")
+              .classList.remove("activo");
+            obtenerCamiones(); // refresca la lista
+          } else {
+            alert(resultado.mensaje);
+          }
+        });
 
+      document
+        .getElementById("formCrearCamion")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
 
+          const datos = {
+            patente: document.getElementById("patenteCrear").value,
+            capacidad: document.getElementById("capacidadCrearCamion").value,
+            estado: document.getElementById("estadoCrearCamion").value,
+          };
 
+          const resp = await fetch(`${API_URL}Registrar`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(datos),
+          });
 
+          const resultado = await resp.json();
 
-<script>
+          if (resultado.status === "success") {
+            document
+              .getElementById("overlayCrearCamiones")
+              .classList.remove("activo");
+            obtenerCamiones();
+          } else {
+            alert(resultado.mensaje);
+          }
+        });
 
+      function toggleMenu() {
+        document.getElementById("menu").classList.toggle("activo");
+      }
 
-function toggleMenu(){
+      function cerrarSesion() {
+        localStorage.removeItem("logueado");
+        localStorage.removeItem("nombreUsuario");
 
-    document
-    .getElementById("menu")
-    .classList.toggle("activo");
+        window.location.href = "index.html";
+      }
 
-}
+      function cargarUsuario() {
+        const nombre = localStorage.getItem("nombreUsuario") || "Usuario";
+        const inicial = nombre.charAt(0).toUpperCase();
 
+        document.getElementById("usuario").innerHTML = `
 
-function cerrarSesion(){
+      <span class="nombre-usuario">${nombre}</span>
 
-    localStorage.removeItem("logueado");
-    localStorage.removeItem("nombreUsuario");
+      <button class="usuario-btn" onclick="abrirUsuario()">
+          ${inicial}
+      </button>
 
-    window.location.href = "index.html";
+      <div id="menuUsuario" class="menu-usuario">
 
-}
+          <button onclick="cerrarSesion()">
+              Cerrar Sesión
+          </button>
 
+      </div>
 
-function cargarUsuario(){
+      `;
+      }
 
-    const nombre = localStorage.getItem("nombreUsuario") || "Usuario";
-    const inicial = nombre.charAt(0).toUpperCase();
+      function abrirUsuario() {
+        document.getElementById("menuUsuario").classList.toggle("activo");
+      }
 
-    document.getElementById("usuario").innerHTML = `
+      cargarUsuario();
 
-    <span class="nombre-usuario">${nombre}</span>
+      function abrirCrearCamion() {
+        document.getElementById("overlayCrearCamiones").classList.add("activo");
+      }
 
-    <button class="usuario-btn" onclick="abrirUsuario()">
-        ${inicial}
+      function cerrarModalCamiones(evento) {
+        if (evento.target.id === "overlayCamiones") {
+          document.getElementById("overlayCamiones").classList.remove("activo");
+        }
+      }
+
+      function seleccionarCamion(patente) {
+        const camion = camiones.find((c) => c.patente === patente);
+        if (!camion) return;
+
+        document.getElementById("patenteOriginal").value = camion.patente;
+        document.getElementById("capacidadEditarCamion").value =
+          camion.capacidad ?? "";
+        document.getElementById("estadoEditarCamion").value =
+          camion.estado ?? "";
+
+        document.getElementById("overlayCamiones").classList.add("activo");
+      }
+
+      async function obtenerCamiones() {
+        try {
+          const resp = await fetch(`${API_URL}Camiones`);
+          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          const data = await resp.json();
+          camiones = Array.isArray(data) ? data : data?.camiones || [];
+          renderizarLista();
+        } catch (error) {
+          console.error("Error al obtener camiones:", error);
+        }
+      }
+
+      async function eliminarCamion(patente) {
+        if (confirm("¿Está seguro de que desea eliminar este camión?")) {
+          const resp = await fetch(`${API_URL}Borrar`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ patente }),
+          });
+          try {
+            const resultado = await resp.json();
+            if (resultado.status === "success") {
+              obtenerCamiones();
+            } else {
+              alert("No se pudo eliminar el camión.");
+            }
+          } catch (error) {
+            console.error(error);
+            alert("Error de conexión al eliminar camión.");
+          }
+        }
+      }
+
+      function renderizarLista() {
+        const listaContainer = document.getElementById("listaCamiones");
+
+        if (camiones.length === 0) {
+          listaContainer.innerHTML = "<p>No hay camiones disponibles.</p>";
+          return;
+        }
+
+        let html = '<ul style="list-style: none; padding: 0; margin: 0;">';
+
+        camiones.forEach((camion) => {
+          html += `
+<li class="camion-item">
+  <span>
+    <strong>Camión ${camion.patente}</strong>
+    - ${camion.capacidad ?? "Sin capacidad"}
+    - ${camion.estado ?? "Sin estado"}
+  </span>
+  <span class="camion-acciones">
+    <button class="btn-modificar" onclick="seleccionarCamion('${camion.patente}')">
+      Modificar
     </button>
+    <button class="btn-eliminar" onclick="eliminarCamion('${camion.patente}')">
+      Eliminar
+    </button>
+  </span>
+</li>`;
+        });
 
-    <div id="menuUsuario" class="menu-usuario">
+        html += "</ul>";
+        listaContainer.innerHTML = html;
+      }
 
-        <button onclick="cerrarSesion()">
-            Cerrar Sesión
-        </button>
-
-    </div>
-
-    `;
-
-}
-
-
-function abrirUsuario(){
-
-    document
-    .getElementById("menuUsuario")
-    .classList.toggle("activo");
-
-}
-
-
-cargarUsuario();
-
-
-</script>
-
-
-
-</body>
-
+      obtenerCamiones();
+    </script>
+  </body>
 </html>

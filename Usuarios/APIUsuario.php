@@ -42,8 +42,7 @@ break;
 		
 		//Registrar un usuario
 		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Registrar'){
-			//$json = file_get_contents('php://input');
-			//$datos = json_decode($json);
+
 			echo json_encode ($controladorObj->crearUsuario());
 		//Loguear usuario
 		}

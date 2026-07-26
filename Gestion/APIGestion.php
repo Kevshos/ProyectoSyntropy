@@ -1,15 +1,13 @@
 <?php
 header('Content-Type: application/json');
 require_once 'ContenedoresController.php';
-require_once 'CamionController.php';
 $controladorContenedor= new ContenedoresController();
-$controladorCamion = new CamionController();
 
 $method =           $_SERVER['REQUEST_METHOD'];
 $uri    = parse_url($_SERVER['REQUEST_URI'],    PHP_URL_PATH);
 
 switch ($method) {
-	case 'GET':
+	case 'GET';
 		$Matricula = '';
 
 		if($uri === '/Proyecto/ProyectoSyntropy/Gestion/miApi/Contenedores'){

@@ -5,11 +5,11 @@ class ContenedoresController
 
 	public function __construct()
 	{
-		$conexionbd = mysqli_connect("localhost","root","","prueba");
+		$conexionbd = mysqli_connect("localhost","root","","syntropy");
 		if (!$conexionbd){
 			die("Error de conexion ". mysqli_connect_error());
 		}
-		require "CamionModel.php";
+		require "ContenedorModel.php";
 		$this->modeloObj = new ContenedorModel($conexionbd);
 	}
 
@@ -38,14 +38,26 @@ class ContenedoresController
 			$n = $datos->numero;
 			$b = $datos->barrio;
 
-		return $this->modeloObj -> crearContenedor($cap, $t, $e, $c,$n,$b);
+		$resultado= $this->modeloObj -> crearContenedor($cap, $t, $e, $c,$n,$b);
+
+		if ($resultado) {
+        return ["status" => "success", "mensaje" => "Contenedor creado correctamente"];
+    } else {
+        return ["status" => "error", "mensaje" => "No se pudo crear el contenedor"];
+    }
 	}
 	public function eliminarContenedor()
 	{
 		$json = file_get_contents('php://input');
 			$datos = json_decode($json);
 			$id = $datos->idContenedor;
-		return $this->modeloObj->eliminarContenedor($id);
+		$resultado = $this->modeloObj->eliminarContenedor($id);
+
+if ($resultado) {
+    return ["status" => "success", "mensaje" => "Contenedor eliminado correctamente"];
+} else {
+    return ["status" => "error", "mensaje" => "No se pudo eliminar el contenedor"];
+}
 	}
 	public function actualizarContenedor()
 	{
@@ -64,6 +76,11 @@ class ContenedoresController
 		$n = $datos->numero;
 		$b = $datos->barrio;
 
-		return $this->modeloObj->actualizarContenedor($id, $cap, $t, $e, $c, $n, $b);
+		$resultado = $this->modeloObj->actualizarContenedor($id, $cap, $t, $e, $c, $n, $b);
+		if ($resultado) {
+    return ["status" => "success", "mensaje" => "Contenedor actualizado correctamente"];
+} else {
+    return ["status" => "error", "mensaje" => "No se pudo actualizar el contenedor"];
+}
 	}
 }
