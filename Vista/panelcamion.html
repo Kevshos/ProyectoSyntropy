@@ -95,16 +95,25 @@
             <input id="matriculaCrear" required />
 
             <label>Tipo</label>
-            <input id="tipoCrear" />
+            <select id="tipoCrear" required>
+              <option value="" disabled selected>Seleccione un tipo</option>
+              <option value="Levante Lateral">Levante Lateral</option>
+              <option value="Levante Trasero">Levante Trasero</option>
+              <option value="Caja Abierta">Caja Abierta</option>
+              <option value="Caja Cerrada">Caja Cerrada</option>
+            </select>
 
             <label>Capacidad de carga</label>
             <input id="capacidadCargaCrear" type="number" />
 
             <label>Estado</label>
-            <input
-              id="estadoCrearCamion"
-              placeholder="Ej: En servicio, Disponible, Mantenimiento"
-            />
+            <select id="estadoCrearCamion" required>
+              <option value="" disabled selected>Seleccione un estado</option>
+              <option value="Disponible">Disponible</option>
+              <option value="Mantenimiento">Mantenimiento</option>
+              <option value="En Servicio">En Servicio</option>
+              <option value="Averiado">Averiado</option>
+            </select>
 
             <label>Ubicación</label>
             <input id="ubicacionCrearCamion" />
@@ -145,13 +154,25 @@
           <input type="hidden" id="matriculaOriginal" />
 
           <label>Tipo</label>
-          <input id="tipoEditarCamion" />
+          <select id="tipoEditarCamion" required>
+            <option value="" disabled selected>Seleccione un tipo</option>
+            <option value="Levante Lateral">Levante Lateral</option>
+            <option value="Levante Trasero">Levante Trasero</option>
+            <option value="Caja Abierta">Caja Abierta</option>
+            <option value="Caja Cerrada">Caja Cerrada</option>
+          </select>
 
           <label>Capacidad de carga</label>
           <input id="capacidadCargaEditar" type="number" />
 
           <label>Estado</label>
-          <input id="estadoEditarCamion" />
+          <select id="estadoEditarCamion" required>
+            <option value="" disabled selected>Seleccione un estado</option>
+            <option value="Disponible">Disponible</option>
+            <option value="Mantenimiento">Mantenimiento</option>
+            <option value="En Servicio">En Servicio</option>
+            <option value="Averiado">Averiado</option>
+          </select>
 
           <label>Ubicación</label>
           <input id="ubicacionEditarCamion" />

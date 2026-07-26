@@ -107,7 +107,12 @@
             <input id="nicknameCrear" />
 
             <label>Rol</label>
-            <input id="rolCrear" />
+            <select id="rolCrear" required>
+              <option value="" disabled>Seleccione un rol</option>
+              <option value="Vecino">Vecino</option>
+              <option value="Operario">Operario</option>
+              <option value="Administrador">Administrador</option>
+            </select>
 
             <button class="btn-crear-usuario" type="submit">
               Crear Usuario
@@ -163,8 +168,12 @@
             placeholder="Dejar vacío para no modificar"
           />
           <label>Rol</label>
-          <input id="rolEditar" placeholder="Dejar vacío para no modificar" />
-
+          <select id="rolEditar" required>
+            <option value="" disabled>Seleccione un rol</option>
+            <option value="Vecino">Vecino</option>
+            <option value="Operario">Operario</option>
+            <option value="Administrador">Administrador</option>
+          </select>
           <button class="btn-guardar-usuario" type="submit">
             Guardar cambios
           </button>

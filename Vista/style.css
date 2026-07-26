@@ -736,7 +736,8 @@ nav button:not(.link-button):hover {
   font-weight: bold;
 }
 
-.modal-usuarios input:not([type="hidden"]) {
+.modal-usuarios input:not([type="hidden"]),
+.modal-usuarios select {
   width: 100%;
   padding: 12px 14px;
   border: 1px solid #d8dee8;
@@ -744,14 +745,21 @@ nav button:not(.link-button):hover {
   color: #1c2745;
   font-size: 0.95rem;
   outline: none;
+  background: white;
+  cursor: pointer;
   transition:
     border-color 0.2s,
     box-shadow 0.2s;
 }
 
-.modal-usuarios input:focus {
+.modal-usuarios input:focus,
+.modal-usuarios select:focus {
   border-color: #2f8f3a;
   box-shadow: 0 0 0 3px rgba(47, 143, 58, 0.14);
+}
+
+.modal-usuarios .btn-guardar-usuario {
+  margin-top: 16px;
 }
 
 .btn-modificar,
@@ -862,7 +870,8 @@ nav button:not(.link-button):hover {
   font-weight: bold;
 }
 
-.crear-usuario input:not([type="hidden"]) {
+.crear-usuario input:not([type="hidden"]),
+.crear-usuario select {
   width: 100%;
   padding: 12px 14px;
   border: 1px solid #d8dee8;
@@ -870,12 +879,15 @@ nav button:not(.link-button):hover {
   color: #1c2745;
   font-size: 0.95rem;
   outline: none;
+  background: white;
+  cursor: pointer;
   transition:
     border-color 0.2s,
     box-shadow 0.2s;
 }
 
-.crear-usuario input:focus {
+.crear-usuario input:focus,
+.crear-usuario select:focus {
   border-color: #2f8f3a;
   box-shadow: 0 0 0 3px rgba(47, 143, 58, 0.14);
 }
@@ -899,10 +911,10 @@ nav button:not(.link-button):hover {
   opacity: 0.85;
   transform: translateY(-1px);
 }
+
 /* =========================
    CREAR CONTENEDOR
 ========================= */
-
 .crear-contenedor {
   background: white;
   width: min(460px, calc(100% - 32px));
@@ -929,7 +941,8 @@ nav button:not(.link-button):hover {
   font-weight: bold;
 }
 
-.crear-contenedor input:not([type="hidden"]) {
+.crear-contenedor input:not([type="hidden"]),
+.crear-contenedor select {
   width: 100%;
   padding: 12px 14px;
   border: 1px solid #d8dee8;
@@ -937,12 +950,15 @@ nav button:not(.link-button):hover {
   color: #1c2745;
   font-size: 0.95rem;
   outline: none;
+  background: white;
+  cursor: pointer;
   transition:
     border-color 0.2s,
     box-shadow 0.2s;
 }
 
-.crear-contenedor input:focus {
+.crear-contenedor input:focus,
+.crear-contenedor select:focus {
   border-color: #2f8f3a;
   box-shadow: 0 0 0 3px rgba(47, 143, 58, 0.14);
 }
@@ -997,7 +1013,8 @@ nav button:not(.link-button):hover {
   font-weight: bold;
 }
 
-.modal-contenedores input:not([type="hidden"]) {
+.modal-contenedores input:not([type="hidden"]),
+.modal-contenedores select {
   width: 100%;
   padding: 12px 14px;
   border: 1px solid #d8dee8;
@@ -1005,12 +1022,15 @@ nav button:not(.link-button):hover {
   color: #1c2745;
   font-size: 0.95rem;
   outline: none;
+  background: white;
+  cursor: pointer;
   transition:
     border-color 0.2s,
     box-shadow 0.2s;
 }
 
-.modal-contenedores input:focus {
+.modal-contenedores input:focus,
+.modal-contenedores select:focus {
   border-color: #2f8f3a;
   box-shadow: 0 0 0 3px rgba(47, 143, 58, 0.14);
 }
@@ -1065,7 +1085,8 @@ nav button:not(.link-button):hover {
   font-weight: bold;
 }
 
-.crear-camion input:not([type="hidden"]) {
+.crear-camion input:not([type="hidden"]),
+.crear-camion select {
   width: 100%;
   padding: 12px 14px;
   border: 1px solid #d8dee8;
@@ -1073,12 +1094,15 @@ nav button:not(.link-button):hover {
   color: #1c2745;
   font-size: 0.95rem;
   outline: none;
+  background: white;
+  cursor: pointer;
   transition:
     border-color 0.2s,
     box-shadow 0.2s;
 }
 
-.crear-camion input:focus {
+.crear-camion input:focus,
+.crear-camion select:focus {
   border-color: #2f8f3a;
   box-shadow: 0 0 0 3px rgba(47, 143, 58, 0.14);
 }
@@ -1133,7 +1157,8 @@ nav button:not(.link-button):hover {
   font-weight: bold;
 }
 
-.modal-camiones input:not([type="hidden"]) {
+.modal-camiones input:not([type="hidden"]),
+.modal-camiones select {
   width: 100%;
   padding: 12px 14px;
   border: 1px solid #d8dee8;
@@ -1141,12 +1166,15 @@ nav button:not(.link-button):hover {
   color: #1c2745;
   font-size: 0.95rem;
   outline: none;
+  background: white;
+  cursor: pointer;
   transition:
     border-color 0.2s,
     box-shadow 0.2s;
 }
 
-.modal-camiones input:focus {
+.modal-camiones input:focus,
+.modal-camiones select:focus {
   border-color: #2f8f3a;
   box-shadow: 0 0 0 3px rgba(47, 143, 58, 0.14);
 }

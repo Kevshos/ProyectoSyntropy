@@ -92,17 +92,24 @@
           <h3>Crear Contenedor</h3>
           <form id="formCrearContenedor">
             <label>Tipo</label>
-            <input id="tipoCrear" required />
+            <select id="tipoCrear" required>
+              <option value="" disabled>Seleccione un tipo</option>
+              <option value="Naranja">Naranja - Reciclables</option>
+              <option value="Metalico">Metalico - Residuos mezclados</option>
+              <option value="Plastico">Plastico - Residuos mezclados</option>
+            </select>
 
             <label>Capacidad de carga</label>
             <input id="capCargaCrear" type="number" required />
 
             <label>Estado</label>
-            <input
-              id="estadoCrear"
-              placeholder="Ej: Activo, Lleno, Disponible"
-              required
-            />
+            <select id="estadoCrear" required>
+              <option value="" disabled>Seleccione un estado</option>
+              <option value="Lleno">Lleno</option>
+              <option value="Vacio">Vacio</option>
+              <option value="Desbordado">Desbordado</option>
+              <option value="Media capacidad">Media capacidad</option>
+            </select>
 
             <label>Calle</label>
             <input id="calleCrear" required />
@@ -151,13 +158,24 @@
           <input type="hidden" id="idOriginalContenedor" />
 
           <label>Tipo</label>
-          <input id="tipoEditar" required />
+          <select id="tipoEditar" required>
+            <option value="" disabled selected>Seleccione un tipo</option>
+            <option value="Naranja">Naranja - Reciclables</option>
+            <option value="Metalico">Metalico - Residuos mezclados</option>
+            <option value="Plastico">Plastico - Residuos mezclados</option>
+          </select>
 
           <label>Capacidad de carga</label>
           <input id="capCargaEditar" type="number" required />
 
           <label>Estado</label>
-          <input id="estadoEditar" required />
+          <select id="estadoEditar" required>
+            <option value="" disabled>Seleccione un estado</option>
+            <option value="Lleno">Lleno</option>
+            <option value="Vacio">Vacio</option>
+            <option value="Desbordado">Desbordado</option>
+            <option value="Media capacidad">Media capacidad</option>
+          </select>
 
           <label>Calle</label>
           <input id="calleEditar" required />
