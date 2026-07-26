@@ -91,22 +91,25 @@
         <div class="crear-camion">
           <h3>Crear Camión</h3>
           <form id="formCrearCamion">
-            <label>Patente</label>
-            <input id="patenteCrear" required />
+            <label>Matrícula</label>
+            <input id="matriculaCrear" required />
 
-            <label>Capacidad</label>
-            <input id="capacidadCrearCamion" type="number" />
+            <label>Tipo</label>
+            <input id="tipoCrear" />
+
+            <label>Capacidad de carga</label>
+            <input id="capacidadCargaCrear" type="number" />
 
             <label>Estado</label>
             <input
               id="estadoCrearCamion"
               placeholder="Ej: En servicio, Disponible, Mantenimiento"
-              required
             />
 
-            <button class="btn-crear-camion" type="submit">
-              Crear Camión
-            </button>
+            <label>Ubicación</label>
+            <input id="ubicacionCrearCamion" />
+
+            <button class="btn-crear-camion" type="submit">Crear Camión</button>
             <button
               class="btn-cancelar-usuario"
               type="button"
@@ -139,20 +142,19 @@
         <h3>Modificar camión</h3>
 
         <form id="formModificarCamion">
-          <input type="hidden" id="patenteOriginal" />
+          <input type="hidden" id="matriculaOriginal" />
 
-          <label>Capacidad</label>
-          <input
-            id="capacidadEditarCamion"
-            type="number"
-            placeholder="Dejar vacío para no modificar"
-          />
+          <label>Tipo</label>
+          <input id="tipoEditarCamion" />
+
+          <label>Capacidad de carga</label>
+          <input id="capacidadCargaEditar" type="number" />
 
           <label>Estado</label>
-          <input
-            id="estadoEditarCamion"
-            placeholder="Dejar vacío para no modificar"
-          />
+          <input id="estadoEditarCamion" />
+
+          <label>Ubicación</label>
+          <input id="ubicacionEditarCamion" />
 
           <button class="btn-guardar-usuario" type="submit">
             Guardar cambios
@@ -173,9 +175,8 @@
     </div>
 
     <script>
-      // TODO: ajustar la base de la URL a la carpeta real de tu API de Camiones
       const API_URL =
-        "http://localhost/Proyecto/ProyectoSyntropy/Camiones/miApi/";
+        "http://localhost/Proyecto/ProyectoSyntropy/Recoleccion/miApi/";
       let camiones = [];
 
       document
@@ -184,12 +185,15 @@
           event.preventDefault();
 
           const datos = {
-            patente: document.getElementById("patenteOriginal").value,
-            capacidad: document.getElementById("capacidadEditarCamion").value,
+            matricula: document.getElementById("matriculaOriginal").value,
+            tipo: document.getElementById("tipoEditarCamion").value,
+            capacidadCarga: document.getElementById("capacidadCargaEditar")
+              .value,
             estado: document.getElementById("estadoEditarCamion").value,
+            ubicacion: document.getElementById("ubicacionEditarCamion").value,
           };
 
-          const resp = await fetch(`${API_URL}Modificar`, {
+          const resp = await fetch(`${API_URL}ActualizarCamion`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos),
@@ -201,9 +205,9 @@
             document
               .getElementById("overlayCamiones")
               .classList.remove("activo");
-            obtenerCamiones(); // refresca la lista
+            obtenerCamiones();
           } else {
-            alert(resultado.mensaje);
+            alert("No se pudo modificar el camión.");
           }
         });
 
@@ -213,12 +217,15 @@
           event.preventDefault();
 
           const datos = {
-            patente: document.getElementById("patenteCrear").value,
-            capacidad: document.getElementById("capacidadCrearCamion").value,
+            matricula: document.getElementById("matriculaCrear").value,
+            tipo: document.getElementById("tipoCrear").value,
+            capacidadCarga: document.getElementById("capacidadCargaCrear")
+              .value,
             estado: document.getElementById("estadoCrearCamion").value,
+            ubicacion: document.getElementById("ubicacionCrearCamion").value,
           };
 
-          const resp = await fetch(`${API_URL}Registrar`, {
+          const resp = await fetch(`${API_URL}RegistrarCamion`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos),
@@ -232,7 +239,7 @@
               .classList.remove("activo");
             obtenerCamiones();
           } else {
-            alert(resultado.mensaje);
+            alert("No se pudo crear el camión.");
           }
         });
 
@@ -286,21 +293,25 @@
         }
       }
 
-      function seleccionarCamion(patente) {
-        const camion = camiones.find((c) => c.patente === patente);
+      function seleccionarCamion(matricula) {
+        const camion = camiones.find((c) => c.matricula === matricula);
         if (!camion) return;
 
-        document.getElementById("patenteOriginal").value = camion.patente;
-        document.getElementById("capacidadEditarCamion").value =
-          camion.capacidad ?? "";
+        document.getElementById("matriculaOriginal").value = camion.matricula;
+        document.getElementById("tipoEditarCamion").value = camion.tipo ?? "";
+        document.getElementById("capacidadCargaEditar").value =
+          camion.capacidadCarga ?? "";
         document.getElementById("estadoEditarCamion").value =
           camion.estado ?? "";
+        document.getElementById("ubicacionEditarCamion").value =
+          camion.ubicacion ?? "";
 
         document.getElementById("overlayCamiones").classList.add("activo");
       }
 
       async function obtenerCamiones() {
         try {
+          // TODO: confirmá el nombre real del endpoint de listado (dejé "Camiones" siguiendo el patrón de "Contenedores")
           const resp = await fetch(`${API_URL}Camiones`);
           if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
           const data = await resp.json();
@@ -311,16 +322,18 @@
         }
       }
 
-      async function eliminarCamion(patente) {
+      async function eliminarCamion(matricula) {
         if (confirm("¿Está seguro de que desea eliminar este camión?")) {
-          const resp = await fetch(`${API_URL}Borrar`, {
+          // TODO: confirmá el nombre real del endpoint (probablemente EliminarCamion, según el patrón de Contenedores)
+          const resp = await fetch(`${API_URL}EliminarCamion`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ patente }),
+            body: JSON.stringify({ matricula }),
           });
           try {
             const resultado = await resp.json();
-            if (resultado.status === "success") {
+            // TODO: si tu controller devuelve {status, mensaje} en vez de true/false, cambiá esta condición a resultado.status === "success"
+            if (resultado === true) {
               obtenerCamiones();
             } else {
               alert("No se pudo eliminar el camión.");
@@ -346,15 +359,16 @@
           html += `
 <li class="camion-item">
   <span>
-    <strong>Camión ${camion.patente}</strong>
-    - ${camion.capacidad ?? "Sin capacidad"}
+    <strong>Camión ${camion.matricula} - ${camion.tipo ?? "Sin tipo"}</strong>
+    - ${camion.ubicacion ?? "Sin ubicación"}
+    - Carga: ${camion.capacidadCarga ?? "Sin capacidad"}
     - ${camion.estado ?? "Sin estado"}
   </span>
   <span class="camion-acciones">
-    <button class="btn-modificar" onclick="seleccionarCamion('${camion.patente}')">
+    <button class="btn-modificar" onclick="seleccionarCamion('${camion.matricula}')">
       Modificar
     </button>
-    <button class="btn-eliminar" onclick="eliminarCamion('${camion.patente}')">
+    <button class="btn-eliminar"style="background-color: #e74c3c; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-size: 14px; cursor: pointer;" onclick="eliminarCamion('${camion.matricula}')">
       Eliminar
     </button>
   </span>

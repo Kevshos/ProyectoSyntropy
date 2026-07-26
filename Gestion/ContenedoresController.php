@@ -28,7 +28,7 @@ class ContenedoresController
 			$datos = json_decode($json);
 			if(!$datos|| !isset($datos->capCarga) || !isset($datos->tipo) || !isset($datos->estado) || !isset($datos->calle) || !isset($datos->numero) || !isset($datos->barrio)){
 				http_response_code(400);
-				echo json_encode(['error' => 'Faltan campos obligatorios']);
+				return ['status' => 'error', 'mensaje' => 'Faltan campos obligatorios'];
 				exit;
 			}
 			$cap = $datos->capCarga;
@@ -65,7 +65,7 @@ if ($resultado) {
 		$datos = json_decode($json);
 		if (!$datos || !isset($datos->idContenedor) || !isset($datos->capCarga) || !isset($datos->tipo) || !isset($datos->estado) || !isset($datos->calle) || !isset($datos->numero) || !isset($datos->barrio)) {
 			http_response_code(400);
-			echo json_encode(['error' => 'Faltan campos obligatorios']);
+			return ['status' => 'error', 'mensaje' => 'Faltan campos obligatorios'];
 			exit;
 		}
 		$id = $datos->idContenedor;

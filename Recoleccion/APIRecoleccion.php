@@ -16,23 +16,27 @@ switch ($method) {
 		}
 		if(strpos($uri, '/miApi/Camion/') === 0){
 			$Matricula = trim(str_replace('/miApi/Camion/', '', $uri));
+			echo json_encode( $controladorCamion->buscarMatricula($Matricula) );
 		}
-		if(!empty($Matricula)){
-			echo json_encode($controladorCamion -> buscarMatricula($Matricula));
-			}
+		
         
 break;
     case 'POST';
 	if($uri === '/Proyecto/ProyectoSyntropy/Recoleccion/miApi/RegistrarCamion'){
-			$json = file_get_contents('php://input');
-			$datos = json_decode($json);
-			if (!empty($datos->Matricula) && !empty($datos->capCarga) && !empty($datos->Tipo) && !empty($datos->Estado) && !empty($datos->Ubicacion)){
+			echo json_encode($controladorCamion->crearCamion());
 			}
-			echo json_encode ($controladorCamion->crearCamion($datos->Matricula, $datos->capCarga, $datos->Tipo, $datos->Estado, $datos->Ubicacion));
-		} else {
-			echo json_encode(['error' => 'Faltan campos obligatorios']);
-		}
 break; 
+	case 'PATCH';
+		if($uri === '/Proyecto/ProyectoSyntropy/Recoleccion/miApi/ActualizarCamion'){
+			echo json_encode($controladorCamion->actualizarCamion());
+			}	
+break;
+
+	case 'DELETE';
+		if($uri === '/Proyecto/ProyectoSyntropy/Recoleccion/miApi/EliminarCamion'){
+			echo json_encode($controladorCamion->eliminarCamion());
+		}
+			break;
     default:
         http_response_code(405);
         echo json_encode(["error" => "Método no permitido"]);
