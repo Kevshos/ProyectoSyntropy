@@ -668,3 +668,138 @@ nav button:not(.link-button):hover {
 
   color: #555;
 }
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  background: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay.activo {
+  display: flex;
+}
+
+.modal-usuarios {
+  background: white;
+  width: min(460px, calc(100% - 32px));
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.22);
+  animation: aparecer-modal 0.2s ease-out;
+}
+
+.modal-usuarios h3 {
+  margin-bottom: 24px;
+  color: #1c2745;
+}
+
+.modal-usuarios form {
+  display: grid;
+  gap: 10px;
+}
+
+.modal-usuarios label {
+  margin-top: 6px;
+  color: #1c2745;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.modal-usuarios input:not([type="hidden"]) {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d8dee8;
+  border-radius: 8px;
+  color: #1c2745;
+  font-size: 0.95rem;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.modal-usuarios input:focus {
+  border-color: #2f8f3a;
+  box-shadow: 0 0 0 3px rgba(47, 143, 58, 0.14);
+}
+
+.btn-modificar,
+.btn-guardar-usuario,
+.btn-cancelar-usuario {
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+
+.btn-guardar-usuario {
+  background: #27ae60;
+}
+
+.btn-cancelar-usuario {
+  background: #6c757d;
+}
+
+.btn-guardar-usuario:hover,
+.btn-cancelar-usuario:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+.btn-modificar {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 6px;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+}
+
+.btn-modificar:hover {
+  background-color: #2980b9;
+}
+
+.btn-modificar:active {
+  transform: scale(0.97);
+}
+
+.modal-usuarios .btn-guardar-usuario {
+  margin-top: 16px;
+}
+
+.usuario-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+@keyframes aparecer-modal {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.usuario-acciones {
+  display: flex;
+  gap: 8px;
+}

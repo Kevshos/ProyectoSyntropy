@@ -55,30 +55,16 @@ break;
 
 		//Eliminar usuario
 		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Borrar'){
-			$json = file_get_contents('php://input');
-			$datos = json_decode($json);
-			if(!empty($datos->mail)){
-			$resultado = $controladorObj->eliminarUsuario($datos->mail);
-			if($resultado){
-				echo json_encode([
-					"exito"=> true,
-					"mensaje"=> "Usuario eliminado con exito."
-				]);
-			} else {
-				echo json_encode([
-				"exito" => false,
-				"mensaje"=> "No se pudo eliminar el usuario o el correo no existe"
-				]);
-				}
+			echo json_encode($resultado = $controladorObj->eliminarUsuario());
 			}
-		} else{
-			echo json_encode(['error'=> 'Faltan ingresar mail']);
-		}
 		break;
 		case 'PATCH';
 		if($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Actualizar'){
 			echo json_encode($controladorObj->responderSolicitud());
 			}
+			if ($uri === '/Proyecto/ProyectoSyntropy/Usuarios/miApi/Modificar') {
+    		echo json_encode($controladorObj->modificarUsuario());
+}
 		break;
     default:
         http_response_code(405);

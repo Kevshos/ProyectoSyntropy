@@ -99,9 +99,25 @@ class UsuarioController
         return ["status" => "error", "mensaje" => "Este usuario/mail no está registrado"];
     }
 }
-	public function eliminarUsuario($mail){
-		return $this->modeloObj->eliminarUsuario($mail);
-	}
+	public function eliminarUsuario(){
+        $json = file_get_contents('php://input');
+        $datos = json_decode($json);
+
+    if (!$datos || !isset($datos->mail)) {
+        return [
+            "status" => "error", 
+            "mensaje" => "No se recibió el correo electrónico"
+        ];
+    }
+
+    $resultado = $this->modeloObj->eliminarUsuario($datos->mail);
+    
+    if($resultado){
+        return["status" => "success", "mensaje" => "Usuario eliminado con éxito"];
+    } else {
+        return ["status" => "error", "mensaje" => "No se pudo eliminar el usuario en la base de datos"];
+    }
+}
 
 	public function responderSolicitud() {
     $json = file_get_contents('php://input');
@@ -127,5 +143,39 @@ public function getAllPendientes(){
     $datos = json_decode($json);
 
     return $this->modeloObj->getAllPendientes();
+}
+public function modificarUsuario() {
+    $datos = json_decode(file_get_contents('php://input'));
+
+    if (
+        !$datos ||
+        empty($datos->mail) ||
+        empty($datos->nombre) ||
+        empty($datos->apellido) ||
+        empty($datos->nickname) ||
+        empty($datos->rol)
+    ) {
+        return ["status" => "error", "mensaje" => "Faltan datos obligatorios."];
+    }
+
+    
+
+    if ($resultado = $this->modeloObj->modificarUsuario(
+        $datos->mail,
+        $datos->nombre,
+        $datos->apellido,
+        $datos->nickname,
+        $datos->rol
+    )) {
+    return [
+        "status" => "success",
+        "mensaje" => "Usuario actualizado."
+    ];
+} else {
+    return [
+        "status" => "error",
+        "mensaje" => "No se pudo actualizar el usuario."
+    ];
+}
 }
 }
