@@ -62,7 +62,7 @@ class CamionModel
 
         }
         public function actualizarCamion($m, $cap, $t, $e, $u){
-            $sql = "UPDATE camion SET tipo=?, capacidad=?, estado=?, ubicacion=? WHERE matricula=?";
+            $sql = "UPDATE camion SET tipo=?, capacidadCarga=?, estado=?, ubicacion=? WHERE matricula=?";
             $stmt = mysqli_prepare($this->conexion, $sql);
             $this->Matricula = $m;
             $this->CapCarga = $cap;

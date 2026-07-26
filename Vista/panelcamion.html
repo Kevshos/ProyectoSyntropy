@@ -84,8 +84,8 @@
 
       <p>Administración de camiones registrados en el sistema.</p>
 
-      <div class="panel" id="OverlayCrearCamion" onclick="abrirCrearCamion()">
-        <button>Crear Camión</button>
+      <div class="panel" id="OverlayCrearCamion" >
+        <button onclick="abrirCrearCamion()"">Crear Camión</button>
       </div>
       <div class="overlay" id="overlayCrearCamiones">
         <div class="crear-camion">
@@ -311,7 +311,6 @@
 
       async function obtenerCamiones() {
         try {
-          // TODO: confirmá el nombre real del endpoint de listado (dejé "Camiones" siguiendo el patrón de "Contenedores")
           const resp = await fetch(`${API_URL}Camiones`);
           if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
           const data = await resp.json();
@@ -324,7 +323,6 @@
 
       async function eliminarCamion(matricula) {
         if (confirm("¿Está seguro de que desea eliminar este camión?")) {
-          // TODO: confirmá el nombre real del endpoint (probablemente EliminarCamion, según el patrón de Contenedores)
           const resp = await fetch(`${API_URL}EliminarCamion`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
@@ -332,8 +330,8 @@
           });
           try {
             const resultado = await resp.json();
-            // TODO: si tu controller devuelve {status, mensaje} en vez de true/false, cambiá esta condición a resultado.status === "success"
-            if (resultado === true) {
+            
+            if (resultado.status === "success") {
               obtenerCamiones();
             } else {
               alert("No se pudo eliminar el camión.");

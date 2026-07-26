@@ -531,6 +531,33 @@ nav button:not(.link-button):hover {
 }
 
 /* =========================
+   BOTON INICIAR SESION
+========================= */
+
+#login-btn button {
+  background: white;
+  color: #2f8f3a;
+
+  border: 2px solid #2f8f3a;
+
+  padding: 12px 20px;
+
+  border-radius: 10px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+#login-btn button:hover {
+  background: #eef7ef;
+
+  transform: translateY(-2px);
+}
+
+/* =========================
    USUARIO
 ========================= */
 
@@ -625,7 +652,8 @@ nav button:not(.link-button):hover {
     gap: 8px;
   }
 
-  #registro-btn button {
+  #registro-btn button,
+  #login-btn button {
     padding: 10px 12px;
 
     font-size: 14px;
