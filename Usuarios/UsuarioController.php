@@ -29,7 +29,7 @@ class UsuarioController
 		public function crearUsuario(){
 			$json = file_get_contents('php://input');
 		$datos = json_decode($json);
-		if (!$datos || !isset($datos->mail) || !isset($datos->contrasenia) || !isset($datos->nombre) || !isset($datos->apellido)|| !isset($datos->usuario)) {
+		if (!$datos || !isset($datos->mail) || !isset($datos->contrasenia) || !isset($datos->nombre) || !isset($datos->apellido)|| !isset($datos->usuario) || !isset($datos->rol)) {
             return ["status" => "error", "mensaje" => "Faltan campos obligatorios o el JSON está mal formado."];
         }
 		$usuario = $datos->usuario;
@@ -38,11 +38,12 @@ class UsuarioController
         $apellido = $datos->apellido;
         $contrasenia = $datos->contrasenia;
         $a2f = isset($datos->a2f) ? $datos->a2f : 0; 
+        $rol = isset($datos->rol) ? $datos->rol : 'Vecino';
 		$UsuarioExistente = $this->modeloObj->buscarMail($datos->mail);
 		if($UsuarioExistente){
 			return ["status"=>"error", "mensaje" => "Este mail ya esta registrado, utilice otro mail"];
 		} 
-		$resultado = $this->modeloObj->crearUsuario($nombre, $apellido, $contrasenia,$mail, $a2f, $usuario);
+		$resultado = $this->modeloObj->crearUsuario($nombre, $apellido, $contrasenia,$mail, $a2f,$rol, $usuario);
 		if($resultado){
 			return ["status"=>"success","mensaje"=>"Solicitud enviada. Su cuenta se encuentra en espera de aprobacion por un administrador."];
 		} else {

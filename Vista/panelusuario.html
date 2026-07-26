@@ -84,10 +84,46 @@
 
       <p>Administración de usuarios del sistema.</p>
 
-      <div class="panel">
+      <div class="panel" id="OverlayCrearUsuario" onclick="abrirCrearUsuario()">
         <button>Crear Usuario</button>
+      </div>
+      <div class="overlay" id="overlayCrearUsuarios">
+        <div class="crear-usuario">
+          <h3>Crear Usuario</h3>
+          <form id="formCrearUsuario">
+            <label>Nombre</label>
+            <input id="nombreCrear" required />
 
-        <button>Eliminar Usuario</button>
+            <label>Apellido</label>
+            <input id="apellidoCrear" required />
+
+            <label>Mail</label>
+            <input id="mailCrear" type="email" required />
+
+            <label>Contraseña</label>
+            <input id="passwordCrear" type="password" required />
+
+            <label>Usuario</label>
+            <input id="nicknameCrear" />
+
+            <label>Rol</label>
+            <input id="rolCrear" />
+
+            <button class="btn-crear-usuario" type="submit">
+              Crear Usuario
+            </button>
+            <button
+              class="btn-cancelar-usuario"
+              onclick="
+                document
+                  .getElementById('overlayCrearUsuarios')
+                  .classList.remove('activo')
+              "
+            >
+              Cancelar
+            </button>
+          </form>
+        </div>
       </div>
 
       <div class="lista-panel">
@@ -97,8 +133,6 @@
         </ul>
       </div>
     </div>
-
-    <!-- Ventana flotante para modificar usuario -->
 
     <div
       class="overlay"
@@ -184,6 +218,38 @@
             alert(resultado.mensaje);
           }
         });
+      document
+        .getElementById("formCrearUsuario")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const datos = {
+            nombre: document.getElementById("nombreCrear").value,
+            apellido: document.getElementById("apellidoCrear").value,
+            mail: document.getElementById("mailCrear").value,
+            contrasenia: document.getElementById("passwordCrear").value,
+            usuario: document.getElementById("nicknameCrear").value,
+            rol: document.getElementById("rolCrear").value,
+          };
+
+          const resp = await fetch(`${API_URL}Registrar`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(datos),
+          });
+
+          const resultado = await resp.json();
+
+          if (resultado.status === "success") {
+            document
+              .getElementById("overlayCrearUsuarios")
+              .classList.remove("activo");
+            obtenerUsuarios();
+          } else {
+            alert(resultado.mensaje);
+          }
+        });
+
       function toggleMenu() {
         document.getElementById("menu").classList.toggle("activo");
       }
@@ -226,6 +292,9 @@
 
       function abrirModalUsuarios() {
         document.getElementById("overlayUsuarios").classList.add("activo");
+      }
+      function abrirCrearUsuario() {
+        document.getElementById("overlayCrearUsuarios").classList.add("activo");
       }
 
       function cerrarModalUsuarios(evento) {

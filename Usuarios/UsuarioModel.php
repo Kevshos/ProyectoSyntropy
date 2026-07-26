@@ -23,7 +23,7 @@ class UsuarioModel
     //Registrar usuario---------------------------------------------------
 
 
-   public function crearUsuario($n, $a, $co, $m, $a2f, $u){
+   public function crearUsuario($n, $a, $co, $m, $a2f,$r, $u){
     try {
         $sql = "INSERT INTO usuario (nombre, apellido, mail, contrasena, a2f, rol, nickname) VALUES (?,?,?,?,?,?,?)";
         $stmt = mysqli_prepare($this->conexion, $sql);
@@ -38,7 +38,7 @@ class UsuarioModel
         $this->Mail = $m;
         $this->A2F = $a2f;
         $this->nickname = $u;
-        $this->rol = 'Vecino';
+        $this->rol = $r;
         
         $stmt->bind_param('ssssiss', $this->Nombre, $this->Apellido, $this->Mail, $this->Contrasenia, $this->A2F, $this->rol, $this->nickname);
         
